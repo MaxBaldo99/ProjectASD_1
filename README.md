@@ -6,4 +6,4 @@ This is the project of Algorithm and Data Structure of UniUd
 - [ ] Find the way to calculate the processo of resolution of the algorithms
 - [ ] Write the code for the three algorithms 
 - [ ] Calculate and prove the complexity of the algorithms
-- [ ] write the final relation
+- [ ] Write the final relation
