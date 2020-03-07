@@ -1,6 +1,9 @@
 #include <assert.h>
 #include "utility.h"
 
+//COSTANTS:
+int BLOCK_SIZE = 5;
+
 void quickSort(int* vec, int p, int q) {
     if (p < q) {
         int r = partition(vec, p, q);
