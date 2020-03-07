@@ -3,6 +3,7 @@
 
 //COSTANTS:
 int BLOCK_SIZE = 5;
+//test
 
 void quickSort(int* vec, int p, int q) {
     if (p < q) {
