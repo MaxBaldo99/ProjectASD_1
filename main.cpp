@@ -25,7 +25,7 @@ int main() {
     cin >> k;
     //cout << heapSelect(h1, h2, k) << endl;
     //come cazzo funziona c++?
-    cout << select(h1.vec, 0, k-1, k) << endl;
+    //cout << select(h1.vec, 0, k-1, k) << endl;
     return 0;
 }
 
