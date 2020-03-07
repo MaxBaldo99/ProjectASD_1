@@ -8,6 +8,24 @@
 //COSTANTS:
 int BLOCK_SIZE = 5;
 
+//SCOPES
+void quickSort(int* vec, int p, int q);
+int quickSelect(int* vec, int p, int q, int k);
+int heapSelect(MinHeap h1, MinHeap h2, int k);
+int select(int* array, int left, int right, int target);
+void insertionSort(int* array, int p, int q);
+
+//MAIN
+int main() {
+    MinHeap h1;
+    MinHeap h2;
+    cin >> h1.vec;
+    int k;
+    cin >> k;
+    cout << heapSelect(h1, h2, k) << endl;
+    return 0;
+}
+
 //METHODS
 void quickSort(int* vec, int p, int q) {
     if (p < q) {
@@ -102,12 +120,3 @@ void insertionSort(int* array, int p, int q) {
     }
 }
 
-int main() {
-    MinHeap h1;
-    MinHeap h2;
-    cin >> h1.vec;
-    int k;
-    cin >> k;
-    cout << heapSelect(h1, h2, k) << endl;
-    return 0;
-}
