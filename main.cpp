@@ -1,10 +1,14 @@
 #include <assert.h>
 #include "utility.h"
 
+//PORCO DIO CE L'HO FATTA BALDO
+//CE L'HO FATTA
+//SI CAZZO DIO CAN
+
 //COSTANTS:
 int BLOCK_SIZE = 5;
-//test
 
+//METHODS
 void quickSort(int* vec, int p, int q) {
     if (p < q) {
         int r = partition(vec, p, q);
@@ -23,19 +27,15 @@ void quickSort(int* vec, int p, int q) {
  * @return the element in the k position
  */
 int quickSelect(int* vec, int p, int q, int k) {
-
-    assert (k > 0 && k <= q - p + 1);       // we assume that k is in the interval of p and q
-
+    // we assume that k is in the interval of p and q
+    assert (k > 0 && k <= q - p + 1);       
     int index = partition(vec, p, q);
-
     if (index - p == k - 1) {
         return vec[index];
     }
-
     if (index - p > k - 1) {
         return quickSelect(vec, p, index - 1, k);
     }
-
     return quickSelect(vec, index + 1, q, k - index + p - 1);
 }
 
@@ -57,7 +57,50 @@ int heapSelect(MinHeap h1, MinHeap h2, int k) {
     return h1.vec[last];
 }
 
+//D => O(n) sia pessimo sia medio
+int select(int* array, int left, int right, int target) {    
+    if (left == right - 1) {
+        return array[left];
+    }    
+    int blocks = 0;
+    int j = left;
+    int bLen = (right / BLOCK_SIZE);
+    bLen = right % BLOCK_SIZE == 0 ? bLen : bLen + 1;
+    int B[bLen];
+    while (j < right) {
+        
+        int limit = j + BLOCK_SIZE - 1;
+        limit = limit < right ? limit : right - 1;
+        insertionSort(array, j, limit);
+        B[blocks++] = array[(j + limit) / 2];
+        j += BLOCK_SIZE;
+    }
+    int median = select(B, 0, blocks, blocks/2);
+    swap(array, median, right-1);
+    int medianPos = partition(array, left, right-1);
+    int k = medianPos - left;
+    if (target == k) {
+        return array[medianPos];
+    } else if (target < k) {
+        return select
+    (array, left, medianPos, target);
+    } else {
+        return select
+    (array, medianPos+1, right, target-k-1);
+    }
+}
 
+void insertionSort(int* array, int p, int q) {
+    for (int j = p+1; j < q+1; j++) {
+        int key = array[j];
+        int i = j - 1;
+        while (i >= p && array[i] > key) {
+            array[i+1] = array[i];
+            i--;
+        }
+        array[i+1] = key;
+    }
+}
 
 int main() {
     MinHeap h1;
