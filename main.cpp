@@ -4,6 +4,7 @@
 //PORCO DIO CE L'HO FATTA BALDO
 //CE L'HO FATTA
 //SI CAZZO DIO CAN
+//HO IMPARATO A FARE COMMIT PUSH E PULL
 
 //COSTANTS:
 int BLOCK_SIZE = 5;
@@ -22,7 +23,9 @@ int main() {
     cin >> h1.vec;
     int k;
     cin >> k;
-    cout << heapSelect(h1, h2, k) << endl;
+    //cout << heapSelect(h1, h2, k) << endl;
+    //come cazzo funziona c++?
+    cout << select(h1.vec, 0, k-1, k) << endl;
     return 0;
 }
 
