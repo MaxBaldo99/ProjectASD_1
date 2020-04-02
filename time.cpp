@@ -6,30 +6,11 @@
 using namespace std;
 using namespace chrono;
 
-
-void swap(vector<duration<double>> vec, int start, int finish) {
-    duration<double> aux = vec[start];
-    vec[start] = vec[finish];
-    vec[finish] = aux;
-}
-
-double mean (vector<duration<double>> vec) {
-    duration<double> sum;
-    for (auto i : vec) {
-        sum += i;
-    }
-    return sum.count()/vec.size();
-}
-
-double meanSquaredError (vector<duration<double>> vec, double mean) {
-    double sum;
-    for (duration<double> i : vec) {
-        sum += pow(i.count()- mean, 2);
-    }
-    return sqrt(sum/vec.size());
-}
-
-
+//media
+double mean (vector<duration<double>> vec);
+//scarto quadratico medio
+double meanSquaredError (vector<duration<double>> vec, double mean);
+void swap(vector<duration<double>> vec, int start, int finish);
 
 int main () {
 
@@ -47,6 +28,8 @@ int main () {
         //cout << resolution.count() << endl;
         res[i] = resolution;
     }
+    //simple sort lol ahahahaha
+    //todo: use select(res, n/2 + 1) instead of this shit
     for (int i = 0; i < n; i++) {
         for (int j = i+1; j<n; j++) {
             if (res[i] > res[j]) {
@@ -102,11 +85,24 @@ int main () {
     return 0;
 }
 
+double mean (vector<duration<double>> vec) {
+    duration<double> sum;
+    for (auto i : vec) {
+        sum += i;
+    }
+    return sum.count()/vec.size();
+}
 
+double meanSquaredError (vector<duration<double>> vec, double mean) {
+    double sum;
+    for (duration<double> i : vec) {
+        sum += pow(i.count()- mean, 2);
+    }
+    return sqrt(sum/vec.size());
+}
 
-
-
-
-
-
-
+void swap(vector<duration<double>> vec, int start, int finish) {
+    duration<double> aux = vec[start];
+    vec[start] = vec[finish];
+    vec[finish] = aux;
+}
