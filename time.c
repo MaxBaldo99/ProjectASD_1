@@ -14,7 +14,18 @@ int main() {
     clock_t resolution = end - start;
     int e = 0;
 
-    //2) e = 1%
+    //2) ε = e = errore relativo = 1%
+    /*
+        x = tempo reale esecuzione select vettore N elementi
+        N = numero elementi vettore
+        se N < 10000 ==> x < res ==> non riesce a otterne il tempo
+        x^ = tempo misurato di esecuzione (x +- res)
+        x - res <= x^ <= x + res 
+        ε = (x^ - x) / x
+        - res/x <= ε <= + res/x
+        obbiettivo: ε <= 1/100 = 0.01
+        quindi: x^ >= 100 * res + res = res * (100 + 1) = 101 * res
+    */
     //prima devo prendere ti = tempo inizializzaione vettore
     //==> tempo totale >= resolution * (1/e + 1)
     int count = 0;

@@ -1,4 +1,4 @@
-#include "minHeap.h"
+//#include "minHeap.h"
 
 int HEAP_LENGTH = 100;
 int HEAP_SIZE = 0;

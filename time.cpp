@@ -6,58 +6,68 @@
 using namespace std;
 using namespace chrono;
 
+#define max(x, y) (((x) > (y)) ? (x) : (y))
 //media
 double mean (vector<duration<double>> vec);
 //scarto quadratico medio
 double meanSquaredError (vector<duration<double>> vec, double mean);
 void swap(vector<duration<double>> vec, int start, int finish);
+vector<duration<double>> resVector(int n);
+duration<double> initializeTime(int nElements, int repetitons);
 
 int main () {
 
-    //Risoluzione
+    //1) prendere risoluzione
     int n = 101;
     vector<duration<double>> res = vector<duration<double>>(n);
-    steady_clock::time_point start, end;
+    res = resVector(n);
     duration<double> resolution;
-    for (int i = 0; i < n; i++ ) {
-        start = steady_clock::now();
-        do {
-            end = steady_clock::now();
-        } while (end == start);
-        resolution = duration_cast<duration<double>>(end - start);
-        //cout << resolution.count() << endl;
-        res[i] = resolution;
-    }
+    
     //simple sort lol ahahahaha
     //todo: use select(res, n/2 + 1) instead of this shit
     for (int i = 0; i < n; i++) {
-        for (int j = i+1; j<n; j++) {
+        for (int j = i+1; j < n; j++) {
             if (res[i] > res[j]) {
                 swap(res, i, j);
             }
         }
     }
-    //cout << "med merda: "<< endl;
     resolution = res[n/2 + 1];
-    //cout << resolution.count() << endl;
+    cout << "resolution: " << resolution.count() << endl;
+
+    //2) valutare errore relativo
 
     //Inizializzazione
 
-    vector<duration<double>> tinit = vector<duration<double>>(n);
     //steady_clock::time_point start, end;
-    duration<double> ti;
-    start = steady_clock::now();
-    srand(time(NULL));
-    for (int i = 0; i < n; i++ ) {
-        vector<int> vec = vector<int>((i+1)*n); //(i+1)*n
-        for (int j : vec) {
-            double x = rand()*(i+1)*n*5;
-            j = x;
+    /*
+        nElements in array:
+        100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
+        1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
+        10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
+    */
+    int nElements = 0;
+    int rep = 118; //num total of array initialized: 10 + 9 + 99
+    int nTimes = 100; //num of times we want to measure init time
+    vector<duration<double>> tinit = vector<duration<double>>(rep);
+    for(int i = 0; i < rep; i++) {
+        if(i == 55) {
+            i = 55;
         }
+        if(i < 10) {
+            nElements += 100;
+        } else if(i < 19) {
+            nElements += 1000;
+            nTimes = 20;
+        } else {
+            nElements += 10000;
+            //nTimes-- every two iterations, till when is equal to 2
+            nTimes = i % 2 == 0 ? nTimes : max(2, nTimes - 1);
+        }
+        tinit[i] = initializeTime(nElements, nTimes);
+        cout << (i+1) << ") n° elementi: " << nElements;
+        cout << " => init time " << tinit[i].count() / nTimes << endl;
     }
-    end = steady_clock::now();
-    ti = end - start;
-    cout <<  ti.count()/n << endl;
 
     /*
     int count = 0;
@@ -105,4 +115,37 @@ void swap(vector<duration<double>> vec, int start, int finish) {
     duration<double> aux = vec[start];
     vec[start] = vec[finish];
     vec[finish] = aux;
+}
+
+//n = 101 good
+vector<duration<double>> resVector(int n) {
+    vector<duration<double>> res = vector<duration<double>>(n);
+    steady_clock::time_point start, end;
+    for (int i = 0; i < n; i++ ) {
+        start = steady_clock::now();
+        do {
+            end = steady_clock::now();
+        } while (end == start);
+        res[i] = duration_cast<duration<double>>(end - start);
+        //cout << res[i].count() << endl;
+    }
+    return res;
+}
+
+//measure medium time needed to allocate a nElements vector randomly, repetitions times
+duration<double> initializeTime(int nElements, int repetitons) {
+    srand(time(NULL));
+    steady_clock::time_point start, end;
+    start = steady_clock::now();
+    for (int i = 0; i < repetitons; i++) {
+        vector<int> vec = vector<int>(nElements);
+        for (int j : vec) {
+            double x = rand();//*(i+1)*n*5;
+            j = x;
+        }
+    }
+    end = steady_clock::now();
+    //delete vec;
+    return (duration<double>)((end - start) / repetitons);
+
 }

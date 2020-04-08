@@ -3,8 +3,8 @@
 #include <string.h> 
 #include <stdlib.h>
 #include <time.h>
-#include "useful.h"
-#include "minHeap.h"
+//#include "useful.h"
+//#include "minHeap.h"
 
 int selectionSort(int *array, int size, int target);
 int quickSelect(int *array, int left, int right, int target);
@@ -89,7 +89,7 @@ int quickSelect(int *array, int left, int right, int target) {
 //C => O(k log k + n) sia pessimo sia medio
 int heapSelect(int *array, int size, int target) { 
     buildMinHeap(array, size);
-    printArrayBasic(array, size);
+    //printArrayBasic(array, size);
     int bIndexes[size];
     int bValues[size];
     int bSize = 1;

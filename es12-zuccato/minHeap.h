@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <string.h> 
 #include <stdlib.h>
-#include "useful.h"
+//#include "useful.h"
 
 void buildMinHeap(int *array, int length);
 void insert(int *array, int size, int length, int val);
