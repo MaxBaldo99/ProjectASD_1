@@ -51,9 +51,6 @@ int main () {
     int nTimes = 100; //num of times we want to measure init time
     vector<duration<double>> tinit = vector<duration<double>>(rep);
     for(int i = 0; i < rep; i++) {
-        if(i == 55) {
-            i = 55;
-        }
         if(i < 10) {
             nElements += 100;
         } else if(i < 19) {
