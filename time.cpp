@@ -3,6 +3,7 @@
 #include <iostream>
 #include "vector"
 #include <cstdlib>
+#include <fstream>
 using namespace std;
 using namespace chrono;
 
@@ -46,24 +47,36 @@ int main () {
         1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
-    int nElements = 0;
+    int nElements = 100;
     int rep = 118; //num total of array initialized: 10 + 9 + 99
     int nTimes = 100; //num of times we want to measure init time
     vector<duration<double>> tinit = vector<duration<double>>(rep);
+
+    //output to file.txt
+    ofstream myfile ("data.txt");
+    if (myfile.is_open())
+    {
+        myfile << "n° elem\tinit time\tn° rip\n";
+    }
     for(int i = 0; i < rep; i++) {
-        if(i < 10) {
-            nElements += 100;
-        } else if(i < 19) {
-            nElements += 1000;
-            nTimes = 20;
+        tinit[i] = initializeTime(nElements, nTimes);
+        //cout << (i+1) << ") n° elementi: " << nElements;
+        //cout << " => init time " << tinit[i].count() / nTimes << endl;
+
+        myfile << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
+
+        //0 <= i <= 9 ==> nElements += 100
+        //10 <= i <= 17 0 ==> nElements += 1.000
+        //i > 17 ==> nElements += 10.000
+        nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
+        if(i < 18) {
+            nElements += 100 * max(1, (i+1)/10*10);
+            //nTimes -= 5;
         } else {
             nElements += 10000;
             //nTimes-- every two iterations, till when is equal to 2
-            nTimes = i % 2 == 0 ? nTimes : max(2, nTimes - 1);
+            //nTimes = i % 2 == 0 ? max(2, nTimes - 1) : nTimes;
         }
-        tinit[i] = initializeTime(nElements, nTimes);
-        cout << (i+1) << ") n° elementi: " << nElements;
-        cout << " => init time " << tinit[i].count() / nTimes << endl;
     }
 
     /*
