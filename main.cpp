@@ -39,6 +39,7 @@ int main() {
         texec[i] = ttot[i] - tinit[i];
         myfile << texec[i].count() << "\n";
     }
+    myfile.close();
     //cout << quickSelect(&vec[0], 0, vec.size()-1, k) << endl;
     return 0;
 }
@@ -122,6 +123,7 @@ vector<duration<double>> initialization() {
         nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
         nElements = updateNumOfElem(nElements, i);
     }
+    myfile.close();
     return tinit;
 }
 
@@ -144,12 +146,12 @@ vector<duration<double>> execution(vector<int> vec, int k) {
     }
     steady_clock::time_point start, end;
     for(int i = 0; i < nOfArrays; i++) {
-        cout << i << ") quickselect on array dim: " << nElements;
         vec.clear();
         vec = randomize(nElements);
         //todo passare metodo come par?
         start = steady_clock::now();
-        for(i = 0; i < nTimes; i++) {
+        cout << i << ") quickselect on array dim: " << nElements << endl;
+        for(int j = 0; j < nTimes; j++) {
             quickSelect(&vec[0], 0, vec.size() - 1, k);
         }
         end = steady_clock::now();
@@ -162,6 +164,7 @@ vector<duration<double>> execution(vector<int> vec, int k) {
         nTimes = i % 1 == 0 ? max(2, nTimes - 5) : nTimes;
         nElements = updateNumOfElem(nElements, i);
     }
+    myfile.close();
 
     return ttot;
 }
