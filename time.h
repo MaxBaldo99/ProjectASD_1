@@ -25,8 +25,10 @@ double mean (vector<duration<double>> vec);
 double meanSquaredError (vector<duration<double>> vec, double mean);
 void swap(vector<duration<double>> vec, int start, int finish);
 vector<duration<double>> resolutionVec(int n);
-duration<double> initializeTime(int nElements, int repetitons);
-duration<double> resolution ();
+duration<double> initializeTime(int nElements, int repetitions);
+duration<double> resolution();
+vector<int> randomize(int nElements);
+int updateNumOfElem (int nElements, int i);
 
 
 void time () {

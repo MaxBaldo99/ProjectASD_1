@@ -24,10 +24,13 @@ int main() {
     int k;
     cin >> k;
     duration<double> res = resolution();
+    cout << "inizializzo\n";
     vector<duration<double>> tinit = initialization();
+    cout << "eseguo\n";
     vector<duration<double>> ttot = execution(vec, k);
     vector<duration<double>> texec(nOfArrays);
     ofstream myfile ("exec.txt");
+    cout << "scrivo su file\n";
     if (myfile.is_open())
     {
         myfile << "exec time\n";
