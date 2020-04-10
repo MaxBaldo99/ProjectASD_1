@@ -5,6 +5,41 @@
 #include <fstream>
 using namespace chrono;
 
+void quickSort(int* vec, int p, int q);
+int quickSelect(int* vec, int p, int q, int k);
+int heapSelect(MinHeap h1, MinHeap h2, int k);
+vector<duration<double>> initialization();
+vector<duration<double>> execution(vector<int> vec, int k);
+
+int nOfArrays = 118; //num total of array initialized: 10 + 9 + 99
+
+/*
+    IMPARA:
+    '\n' >>>>>>>>>>>>>>> endl
+*/
+
+int main() {
+    vector<int> vec;
+    //cin >> vec;
+    int k;
+    cin >> k;
+    duration<double> res = resolution();
+    vector<duration<double>> tinit = initialization();
+    vector<duration<double>> ttot = execution(vec, k);
+    vector<duration<double>> texec(nOfArrays);
+    ofstream myfile ("exec.txt");
+    if (myfile.is_open())
+    {
+        myfile << "exec time\n";
+    }
+    for(int i = 0; i < nOfArrays; i++) {
+        texec[i] = ttot[i] - tinit[i];
+        myfile << texec[i].count() << "\n";
+    }
+    //cout << quickSelect(&vec[0], 0, vec.size()-1, k) << endl;
+    return 0;
+}
+
 void quickSort(int* vec, int p, int q) {
     if (p < q) {
         int r = partition(vec, p, q);
@@ -57,7 +92,7 @@ int heapSelect(MinHeap h1, MinHeap h2, int k) {
     return h1.vec[last];
 }
 
-void initialization() {
+vector<duration<double>> initialization() {
     /*
         nElements in array:
         100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
@@ -65,12 +100,11 @@ void initialization() {
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
     int nElements = 100;
-    int nOfArrays = 118; //num total of array initialized: 10 + 9 + 99
     int nTimes = 100; //num of times we want to measure init time
     vector<duration<double>> tinit = vector<duration<double>>(nOfArrays);
 
     //output to file.txt
-    ofstream myfile ("data.txt");
+    ofstream myfile ("init.txt");
     if (myfile.is_open())
     {
         myfile << "n° elem\tinit time\tn° rip\n";
@@ -84,19 +118,46 @@ void initialization() {
 
         nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
         nElements = updateNumOfElem(nElements, i);
-
-
-
     }
+    return tinit;
 }
 
+vector<duration<double>> execution(vector<int> vec, int k) {
+    /*
+        nElements in array:
+        100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
+        1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
+        10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
+    */
+    int nElements = 100;
+    int nTimes = 80; //num of times we want to measure init time
+    vector<duration<double>> ttot = vector<duration<double>>(nOfArrays);
 
+    //output to file.txt
+    ofstream myfile ("tot.txt");
+    if (myfile.is_open())
+    {
+        myfile << "n° elem\ttot time\tn° rip\n";
+    }
+    steady_clock::time_point start, end;
+    for(int i = 0; i < nOfArrays; i++) {
+        vec.clear();
+        vec = randomize(nElements);
+        //todo passare metodo come par?
+        start = steady_clock::now();
+        for(i = 0; i < nTimes; i++) {
+            quickSelect(&vec[0], 0, vec.size() - 1, k);
+        }
+        end = steady_clock::now();
+        ttot[i] = (duration<double>)((end - start) / nTimes);
+        //cout << (i+1) << ") n° elementi: " << nElements;
+        //cout << " => init time " << tinit[i].count() / nTimes << endl;
 
-int main() {
-    vector<int> vec;
-    cin >> vec;
-    int k;
-    cin >> k;
-    cout << quickSelect(&vec[0], 0, vec.size()-1, k) << endl;
-    return 0;
+        myfile << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
+
+        nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
+        nElements = updateNumOfElem(nElements, i);
+    }
+
+    return ttot;
 }

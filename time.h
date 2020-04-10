@@ -26,27 +26,12 @@ double meanSquaredError (vector<duration<double>> vec, double mean);
 void swap(vector<duration<double>> vec, int start, int finish);
 vector<duration<double>> resolutionVec(int n);
 duration<double> initializeTime(int nElements, int repetitons);
+duration<double> resolution ();
 
 
 void time () {
 
     //1) prendere risoluzione
-    int n = 101;
-    vector<duration<double>> res = vector<duration<double>>(n);
-    res = resolutionVec(n);
-    duration<double> resolution;
-
-    //simple sort lol ahahahaha
-    //todo: use select(res, n/2 + 1) instead of this shit
-    for (int i = 0; i < n; i++) {
-        for (int j = i+1; j < n; j++) {
-            if (res[i] > res[j]) {
-                swap(res, i, j);
-            }
-        }
-    }
-    resolution = res[n/2 + 1];
-    cout << "resolution: " << resolution.count() << endl;
 
     //2) valutare errore relativo
 
@@ -79,6 +64,27 @@ void time () {
     cout << "It took me " << time_span.count() << " seconds.";
     cout << std::endl;*/
 
+}
+
+duration<double> resolution () {
+    
+    int n = 101;
+    vector<duration<double>> res = vector<duration<double>>(n);
+    res = resolutionVec(n);
+    duration<double> resolution;
+
+    //simple sort lol ahahahaha
+    //todo: use select(res, n/2 + 1) instead of this shit
+    for (int i = 0; i < n; i++) {
+        for (int j = i+1; j < n; j++) {
+            if (res[i] > res[j]) {
+                swap(res, i, j);
+            }
+        }
+    }
+    resolution = res[n/2 + 1];
+    //cout << "resolution: " << resolution.count() << endl;
+    return resolution;
 }
 
 double mean (vector<duration<double>> vec) {
@@ -119,21 +125,26 @@ vector<duration<double>> resolutionVec(int n) {
 }
 
 //measure medium time needed to allocate a nElements vector randomly, repetitions times
-duration<double> initializeTime(int nElements, int repetitons) {
-    srand(time(NULL));
+duration<double> initializeTime(int nElements, int repetitions) {
     steady_clock::time_point start, end;
     start = steady_clock::now();
-    for (int i = 0; i < repetitons; i++) {
-        vector<int> vec = vector<int>(nElements);
-        for (int j : vec) {
-            double x = rand();//*(i+1)*n*5;
-            j = x;
-        }
+    vector<int> vec;
+    for (int i = 0; i < repetitions; i++) {
+        vec = randomize(nElements);
     }
     end = steady_clock::now();
     //delete vec;
-    return (duration<double>)((end - start) / repetitons);
+    return (duration<double>)((end - start) / repetitions);
+}
 
+vector<int> randomize(int nElements) {
+    srand(time(NULL));
+    vector<int> vec = vector<int>(nElements);
+    for (int j : vec) {
+        double x = rand();//*(i+1)*n*5;
+        j = x;
+    }
+    return vec;
 }
 
 int updateNumOfElem (int nElements, int i) {
