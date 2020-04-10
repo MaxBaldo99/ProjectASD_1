@@ -20,13 +20,11 @@ void insertionSort(int* array, int p, int q);
 int main() {
     MinHeap h1;
     MinHeap h2;
-    //int *vec;
-    //vector<int> vec;
-    //cin >> h1.vec;
-    //cin >> vec2;
+    vector<int> vec;
+    cin >> vec;
     int k;
     cin >> k;
-    //cout << quickSelect((int *)vec, 0, vec.size() - 1, k) << endl;
+    cout << quickSelect(&vec[0], 0, vec.size() - 1, k) << endl;
     //cout << heapSelect(h1, h2, k) << endl;
     //come cazzo funziona c++?
     //cout << select(h1.vec, 0, k-1, k) << endl;
