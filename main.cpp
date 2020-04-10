@@ -144,6 +144,7 @@ vector<duration<double>> execution(vector<int> vec, int k) {
     }
     steady_clock::time_point start, end;
     for(int i = 0; i < nOfArrays; i++) {
+        cout << i << ") quickselect on array dim: " << nElements;
         vec.clear();
         vec = randomize(nElements);
         //todo passare metodo come par?
@@ -158,7 +159,7 @@ vector<duration<double>> execution(vector<int> vec, int k) {
 
         myfile << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
 
-        nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
+        nTimes = i % 1 == 0 ? max(2, nTimes - 5) : nTimes;
         nElements = updateNumOfElem(nElements, i);
     }
 
