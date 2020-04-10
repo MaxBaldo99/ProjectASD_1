@@ -28,7 +28,7 @@ vector<duration<double>> resolutionVec(int n);
 duration<double> initializeTime(int nElements, int repetitions);
 duration<double> resolution();
 vector<int> randomize(int nElements);
-int updateNumOfElem (int nElements, int i);
+int updateNumOfElem (int n);
 
 
 void time () {
@@ -149,19 +149,28 @@ vector<int> randomize(int nElements) {
     return vec;
 }
 
-int updateNumOfElem (int nElements, int i) {
-    //0 <= i <= 9 ==> nElements += 100
-    //10 <= i <= 17 0 ==> nElements += 1.000
-    //i > 17 ==> nElements += 10.000
-    if(i < 18) {
-        nElements += 100 * max(1, (i+1)/10*10);
-        //nTimes -= 5;
-    } else {
-        nElements += 10000;
-        //nTimes-- every two iterations, till when is equal to 2
-        //nTimes = i % 2 == 0 ? max(2, nTimes - 1) : nTimes;
+int updateNumOfElem (int n) {
+
+    int increase = 100;
+    if(n < pow(10, 3)) { //n < 1k
+        increase = pow(10, 2); //0.1k
+    } else if(n < pow(10, 4)) { //n < 10k
+        increase = pow(10, 3); //1k
+    } else if(n < pow(10, 5)) { //n < 100k
+        increase = pow(10, 4); //10k
+    } else if(n < 5 * pow(10, 5)) { //n < 500k
+        increase = 2.5 * pow(10, 4); //25k
+    } else { //n > 500k
+        increase = 5 * pow(10, 4); //50k
     }
-    return nElements;
+    /*
+    int i = 0;
+    while (i < 6 && n < pow(10, i+3)) {
+        increase = pow(10, i+2);
+        i++;
+    }
+    */
+    return n += increase;
 }
 
 #endif //PROJECTASD_1_TIME_H

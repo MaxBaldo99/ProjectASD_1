@@ -121,7 +121,7 @@ vector<duration<double>> initialization() {
         myfile << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
 
         nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
-        nElements = updateNumOfElem(nElements, i);
+        nElements = updateNumOfElem(nElements);
     }
     myfile.close();
     return tinit;
@@ -139,32 +139,34 @@ vector<duration<double>> execution(vector<int> vec, int k) {
     vector<duration<double>> ttot = vector<duration<double>>(nOfArrays);
 
     //output to file.txt
+    /*
     ofstream myfile ("tot.txt");
     if (myfile.is_open())
     {
         myfile << "n° elem\ttot time\tn° rip\n";
     }
+    */
+    cout << "n° elem\ttot time\tn° rip\n";
     steady_clock::time_point start, end;
     for(int i = 0; i < nOfArrays; i++) {
         vec.clear();
         vec = randomize(nElements);
         //todo passare metodo come par?
         start = steady_clock::now();
-        cout << i << ") quickselect on array dim: " << nElements << endl;
+        //cout << i << ") quickselect on array dim: " << nElements << endl;
         for(int j = 0; j < nTimes; j++) {
             quickSelect(&vec[0], 0, vec.size() - 1, k);
         }
         end = steady_clock::now();
         ttot[i] = (duration<double>)((end - start) / nTimes);
-        //cout << (i+1) << ") n° elementi: " << nElements;
-        //cout << " => init time " << tinit[i].count() / nTimes << endl;
+        cout << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
 
-        myfile << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
+        //myfile << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
 
         nTimes = i % 1 == 0 ? max(2, nTimes - 5) : nTimes;
-        nElements = updateNumOfElem(nElements, i);
+        nElements = updateNumOfElem(nElements);
     }
-    myfile.close();
+    //myfile.close();
 
     return ttot;
 }
