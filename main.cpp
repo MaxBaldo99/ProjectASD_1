@@ -1,37 +1,10 @@
 #include <assert.h>
 #include "utility.h"
+#include "prove/time.h"
+#include "chrono"
+#include <fstream>
+using namespace chrono;
 
-//PORCO DIO CE L'HO FATTA BALDO
-//CE L'HO FATTA
-//SI CAZZO DIO CAN
-//HO IMPARATO A FARE COMMIT PUSH E PULL
-
-//COSTANTS:
-int BLOCK_SIZE = 5;
-
-//SCOPES
-void quickSort(int* vec, int p, int q);
-int quickSelect(int* vec, int p, int q, int k);
-int heapSelect(MinHeap h1, MinHeap h2, int k);
-int select(int* array, int left, int right, int target);
-void insertionSort(int* array, int p, int q);
-
-//MAIN
-int main() {
-    MinHeap h1;
-    MinHeap h2;
-    vector<int> vec;
-    cin >> vec;
-    int k;
-    cin >> k;
-    cout << quickSelect(&vec[0], 0, vec.size() - 1, k) << endl;
-    //cout << heapSelect(h1, h2, k) << endl;
-    //come cazzo funziona c++?
-    //cout << select(h1.vec, 0, k-1, k) << endl;
-    return 0;
-}
-
-//METHODS
 void quickSort(int* vec, int p, int q) {
     if (p < q) {
         int r = partition(vec, p, q);
@@ -50,21 +23,25 @@ void quickSort(int* vec, int p, int q) {
  * @return the element in the k position
  */
 int quickSelect(int* vec, int p, int q, int k) {
-    // we assume that k is in the interval of p and q
-    assert (k > 0 && k <= q - p + 1);       
+
+    assert (k > 0 && k <= q - p + 1);       // we assume that k is in the interval of p and q
+
     int index = partition(vec, p, q);
+
     if (index - p == k - 1) {
         return vec[index];
     }
+
     if (index - p > k - 1) {
         return quickSelect(vec, p, index - 1, k);
     }
+
     return quickSelect(vec, index + 1, q, k - index + p - 1);
 }
 
 int heapSelect(MinHeap h1, MinHeap h2, int k) {
     h1.buildMinHeap();
-    cout << h1.vec << endl;
+    cout << h1.vec;
     h2.insert(0);       //inserisco la posizione nella seconda miHeap
     for (int i = 0; i < k-1; ++i) {
         int nodePosition = h2.extract();
@@ -80,48 +57,46 @@ int heapSelect(MinHeap h1, MinHeap h2, int k) {
     return h1.vec[last];
 }
 
-//D => O(n) sia pessimo sia medio
-int select(int* array, int left, int right, int target) {    
-    if (left == right - 1) {
-        return array[left];
-    }    
-    int blocks = 0;
-    int j = left;
-    int bLen = (right / BLOCK_SIZE);
-    bLen = right % BLOCK_SIZE == 0 ? bLen : bLen + 1;
-    int B[bLen];
-    while (j < right) {
-        
-        int limit = j + BLOCK_SIZE - 1;
-        limit = limit < right ? limit : right - 1;
-        insertionSort(array, j, limit);
-        B[blocks++] = array[(j + limit) / 2];
-        j += BLOCK_SIZE;
+void initialization() {
+    /*
+        nElements in array:
+        100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
+        1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
+        10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
+    */
+    int nElements = 100;
+    int nOfArrays = 118; //num total of array initialized: 10 + 9 + 99
+    int nTimes = 100; //num of times we want to measure init time
+    vector<duration<double>> tinit = vector<duration<double>>(nOfArrays);
+
+    //output to file.txt
+    ofstream myfile ("data.txt");
+    if (myfile.is_open())
+    {
+        myfile << "n° elem\tinit time\tn° rip\n";
     }
-    int median = select(B, 0, blocks, blocks/2);
-    swap(array, median, right-1);
-    int medianPos = partition(array, left, right-1);
-    int k = medianPos - left;
-    if (target == k) {
-        return array[medianPos];
-    } else if (target < k) {
-        return select
-    (array, left, medianPos, target);
-    } else {
-        return select
-    (array, medianPos+1, right, target-k-1);
+    for(int i = 0; i < nOfArrays; i++) {
+        tinit[i] = initializeTime(nElements, nTimes);
+        //cout << (i+1) << ") n° elementi: " << nElements;
+        //cout << " => init time " << tinit[i].count() / nTimes << endl;
+
+        myfile << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
+
+        nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
+        nElements = updateNumOfElem(nElements, i);
+
+
+
     }
 }
 
-void insertionSort(int* array, int p, int q) {
-    for (int j = p+1; j < q+1; j++) {
-        int key = array[j];
-        int i = j - 1;
-        while (i >= p && array[i] > key) {
-            array[i+1] = array[i];
-            i--;
-        }
-        array[i+1] = key;
-    }
-}
 
+
+int main() {
+    vector<int> vec;
+    cin >> vec;
+    int k;
+    cin >> k;
+    cout << quickSelect(&vec[0], 0, vec.size()-1, k) << endl;
+    return 0;
+}
