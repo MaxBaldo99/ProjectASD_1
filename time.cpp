@@ -8,12 +8,20 @@ using namespace std;
 using namespace chrono;
 
 #define max(x, y) (((x) > (y)) ? (x) : (y))
+
+/*
+//ritorna altezza nodo, 0 se nodo è null
+#define h(x) ((x == NULL) ? 0 : x->height)
+//ritorna la altezza nodo->left - altezza nodo right. se nodo è null ritorna 0
+#define hDiff(x) (x == NULL ? 0 : (h(x->left) - h(x->right)))
+*/
+
 //media
 double mean (vector<duration<double>> vec);
 //scarto quadratico medio
 double meanSquaredError (vector<duration<double>> vec, double mean);
 void swap(vector<duration<double>> vec, int start, int finish);
-vector<duration<double>> resVector(int n);
+vector<duration<double>> resolutionVec(int n);
 duration<double> initializeTime(int nElements, int repetitons);
 
 int main () {
@@ -21,7 +29,7 @@ int main () {
     //1) prendere risoluzione
     int n = 101;
     vector<duration<double>> res = vector<duration<double>>(n);
-    res = resVector(n);
+    res = resolutionVec(n);
     duration<double> resolution;
     
     //simple sort lol ahahahaha
@@ -128,7 +136,7 @@ void swap(vector<duration<double>> vec, int start, int finish) {
 }
 
 //n = 101 good
-vector<duration<double>> resVector(int n) {
+vector<duration<double>> resolutionVec(int n) {
     vector<duration<double>> res = vector<duration<double>>(n);
     steady_clock::time_point start, end;
     for (int i = 0; i < n; i++ ) {
