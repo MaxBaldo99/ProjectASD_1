@@ -7,7 +7,7 @@
 using namespace std;
 using namespace chrono;
 
-#define max(x, y) (((x) > (y)) ? (x) : (y))
+#define max(x, y) ((x > y) ? x : y)
 
 /*
 //ritorna altezza nodo, 0 se nodo è null
@@ -41,7 +41,8 @@ int main () {
             }
         }
     }
-    resolution = res[n/2 + 1];
+    //mediana delle risoluzioni
+    resolution = res[n/2 + 1]; 
     cout << "resolution: " << resolution.count() << endl;
 
     //2) valutare errore relativo
@@ -56,9 +57,9 @@ int main () {
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
     int nElements = 100;
-    int rep = 118; //num total of array initialized: 10 + 9 + 99
+    int nOfArrays = 118; //num total of array initialized: 10 + 9 + 99
     int nTimes = 100; //num of times we want to measure init time
-    vector<duration<double>> tinit = vector<duration<double>>(rep);
+    vector<duration<double>> tinit = vector<duration<double>>(nOfArrays);
 
     //output to file.txt
     ofstream myfile ("data.txt");
@@ -66,7 +67,7 @@ int main () {
     {
         myfile << "n° elem\tinit time\tn° rip\n";
     }
-    for(int i = 0; i < rep; i++) {
+    for(int i = 0; i < nOfArrays; i++) {
         tinit[i] = initializeTime(nElements, nTimes);
         //cout << (i+1) << ") n° elementi: " << nElements;
         //cout << " => init time " << tinit[i].count() / nTimes << endl;
@@ -74,13 +75,15 @@ int main () {
         myfile << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
 
         //0 <= i <= 9 ==> nElements += 100
-        //10 <= i <= 17 0 ==> nElements += 1.000
+        //10 <= i <= 17 ==> nElements += 1.000
         //i > 17 ==> nElements += 10.000
         nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
         if(i < 18) {
+            //nElements <= 10k
             nElements += 100 * max(1, (i+1)/10*10);
             //nTimes -= 5;
         } else {
+            //nElements >= 10k
             nElements += 10000;
             //nTimes-- every two iterations, till when is equal to 2
             //nTimes = i % 2 == 0 ? max(2, nTimes - 1) : nTimes;
@@ -151,11 +154,11 @@ vector<duration<double>> resolutionVec(int n) {
 }
 
 //measure medium time needed to allocate a nElements vector randomly, repetitions times
-duration<double> initializeTime(int nElements, int repetitons) {
+duration<double> initializeTime(int nElements, int repetitions) {
     srand(time(NULL));
     steady_clock::time_point start, end;
     start = steady_clock::now();
-    for (int i = 0; i < repetitons; i++) {
+    for (int i = 0; i < repetitions; i++) {
         vector<int> vec = vector<int>(nElements);
         for (int j : vec) {
             double x = rand();//*(i+1)*n*5;
@@ -164,6 +167,6 @@ duration<double> initializeTime(int nElements, int repetitons) {
     }
     end = steady_clock::now();
     //delete vec;
-    return (duration<double>)((end - start) / repetitons);
+    return (duration<double>)((end - start) / repetitions);
 
 }
