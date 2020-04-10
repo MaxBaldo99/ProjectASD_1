@@ -9,9 +9,9 @@ void quickSort(int* vec, int p, int q);
 int quickSelect(int* vec, int p, int q, int k);
 int heapSelect(MinHeap h1, MinHeap h2, int k);
 vector<duration<double>> initialization();
-vector<duration<double>> execution(vector<int> vec, int k);
+vector<duration<double>> execution(vector<int> vec);
 
-int nOfArrays = 118; //num total of array initialized: 10 + 9 + 99
+int nOfArrays;
 
 /*
     IMPARA:
@@ -19,15 +19,14 @@ int nOfArrays = 118; //num total of array initialized: 10 + 9 + 99
 */
 
 int main() {
+    nOfArrays = calcNumOfArrays(100);
     vector<int> vec;
     //cin >> vec;
-    int k;
-    cin >> k;
     duration<double> res = resolution();
     cout << "inizializzo\n";
     vector<duration<double>> tinit = initialization();
     cout << "eseguo\n";
-    vector<duration<double>> ttot = execution(vec, k);
+    vector<duration<double>> ttot = execution(vec);
     vector<duration<double>> texec(nOfArrays);
     ofstream myfile ("exec.txt");
     cout << "scrivo su file\n";
@@ -42,6 +41,7 @@ int main() {
     myfile.close();
     //cout << quickSelect(&vec[0], 0, vec.size()-1, k) << endl;
     return 0;
+    
 }
 
 void quickSort(int* vec, int p, int q) {
@@ -62,20 +62,28 @@ void quickSort(int* vec, int p, int q) {
  * @return the element in the k position
  */
 int quickSelect(int* vec, int p, int q, int k) {
-
     assert (k > 0 && k <= q - p + 1);       // we assume that k is in the interval of p and q
-
+    /*
     int index = partition(vec, p, q);
-
     if (index - p == k - 1) {
         return vec[index];
     }
-
     if (index - p > k - 1) {
         return quickSelect(vec, p, index - 1, k);
     }
-
     return quickSelect(vec, index + 1, q, k - index + p - 1);
+    */
+   while (p <= q) { 
+        int index = partition(vec, p, q); 
+        if (index == k - 1) {
+            return vec[index]; 
+        } else if (index > k - 1) {
+            q = index - 1;
+        } else {
+            p = index + 1; 
+        }
+    } 
+    return -1;
 }
 
 int heapSelect(MinHeap h1, MinHeap h2, int k) {
@@ -107,7 +115,7 @@ vector<duration<double>> initialization() {
     int nTimes = 100; //num of times we want to measure init time
     vector<duration<double>> tinit = vector<duration<double>>(nOfArrays);
 
-    //output to file.txt
+    //output to file
     ofstream myfile ("init.txt");
     if (myfile.is_open())
     {
@@ -127,7 +135,7 @@ vector<duration<double>> initialization() {
     return tinit;
 }
 
-vector<duration<double>> execution(vector<int> vec, int k) {
+vector<duration<double>> execution(vector<int> vec) {
     /*
         nElements in array:
         100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
@@ -135,38 +143,45 @@ vector<duration<double>> execution(vector<int> vec, int k) {
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
     int nElements = 100;
-    int nTimes = 80; //num of times we want to measure init time
+    int nTimes = 100; //num of times we want to measure init time
     vector<duration<double>> ttot = vector<duration<double>>(nOfArrays);
 
-    //output to file.txt
-    /*
+    //output to file
+    
     ofstream myfile ("tot.txt");
     if (myfile.is_open())
     {
         myfile << "n° elem\ttot time\tn° rip\n";
     }
-    */
-    cout << "n° elem\ttot time\tn° rip\n";
+    
+    cout << "i\tn° elem\ttot time\tn° rip\n";
     steady_clock::time_point start, end;
+    srand(time(NULL));
     for(int i = 0; i < nOfArrays; i++) {
-        vec.clear();
-        vec = randomize(nElements);
-        //todo passare metodo come par?
+        int k;
+        k = rand();
+        while(k >= nElements) {
+            k = k/2;
+        }
+
         start = steady_clock::now();
-        //cout << i << ") quickselect on array dim: " << nElements << endl;
         for(int j = 0; j < nTimes; j++) {
+            vec.clear();
+            vec = randomize(nElements);
+            //scegliere metodo
             quickSelect(&vec[0], 0, vec.size() - 1, k);
         }
         end = steady_clock::now();
+
         ttot[i] = (duration<double>)((end - start) / nTimes);
-        cout << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
+        cout << i << ") " << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
 
-        //myfile << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
+        myfile << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
 
-        nTimes = i % 1 == 0 ? max(2, nTimes - 5) : nTimes;
+        nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
         nElements = updateNumOfElem(nElements);
     }
-    //myfile.close();
+    myfile.close();
 
     return ttot;
 }

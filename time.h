@@ -142,9 +142,8 @@ duration<double> initializeTime(int nElements, int repetitions) {
 vector<int> randomize(int nElements) {
     srand(time(NULL));
     vector<int> vec = vector<int>(nElements);
-    for (int j : vec) {
-        double x = rand();//*(i+1)*n*5;
-        j = x;
+    for (int i = 0; i < nElements; i++) {
+        vec[i] = rand();
     }
     return vec;
 }
@@ -160,8 +159,13 @@ int updateNumOfElem (int n) {
         increase = pow(10, 4); //10k
     } else if(n < 5 * pow(10, 5)) { //n < 500k
         increase = 2.5 * pow(10, 4); //25k
-    } else { //n > 500k
+    } else if (n < pow(10, 6)) { //n < 1mln
         increase = 5 * pow(10, 4); //50k
+    } else if (n < 5 * pow(10, 6)) { //n > 1 mln
+        increase = 2.5 * pow(10, 5); //25k
+    } else {
+        n = -1;
+        increase = 0;
     }
     /*
     int i = 0;
@@ -171,6 +175,16 @@ int updateNumOfElem (int n) {
     }
     */
     return n += increase;
+}
+
+int calcNumOfArrays(int startingLength) {
+    int i = 0;
+    int length = startingLength;
+    while(length != -1) {
+        length = updateNumOfElem(length);
+        i++;
+    }
+    return i;
 }
 
 #endif //PROJECTASD_1_TIME_H
