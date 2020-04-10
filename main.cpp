@@ -1,6 +1,6 @@
 #include <assert.h>
 #include "utility.h"
-#include "prove/time.h"
+#include "time.h"
 #include "chrono"
 #include <fstream>
 using namespace chrono;
