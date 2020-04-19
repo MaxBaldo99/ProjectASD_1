@@ -22,7 +22,7 @@ using namespace chrono;
 //media
 double mean (vector<duration<double>> vec);
 //scarto quadratico medio
-double meanSquaredError (vector<duration<double>> vec, double mean);
+double meanSquaredError (vector<duration<double>> vec);
 void swap(vector<duration<double>> vec, int start, int finish);
 vector<duration<double>> resolutionVec(int n);
 duration<double> initializeTime(int nElements, int repetitions);
@@ -97,10 +97,11 @@ double mean (vector<duration<double>> vec) {
     return sum.count()/vec.size();
 }
 
-double meanSquaredError (vector<duration<double>> vec, double mean) {
+double meanSquaredError (vector<duration<double>> vec) {
     double sum;
+    double m = mean(vec);
     for (duration<double> i : vec) {
-        sum += pow(i.count()- mean, 2);
+        sum += pow(i.count()- m, 2);
     }
     return sqrt(sum/vec.size());
 }
