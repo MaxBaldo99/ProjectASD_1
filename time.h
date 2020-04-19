@@ -133,6 +133,9 @@ duration<double> initializeTime(int nElements, int repetitions) {
     vector<int> vec;
     for (int i = 0; i < repetitions; i++) {
         vec = randomize(nElements);
+        /*for(int j = 0; j < nElements; j++) {
+            cout << j << "\t" << vec[j] << "\n";
+        }*/
     }
     end = steady_clock::now();
     //delete vec;

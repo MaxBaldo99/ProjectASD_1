@@ -23,6 +23,7 @@ int main() {
     nOfArrays = calcNumOfArrays(startingLength);
     //cin >> vec;
     duration<double> res = resolution();
+    cout << "resolution: " << res.count() << "\n";
     cout << "inizializzo\n";
     vector<duration<double>> tinit = initialization();
     cout << "eseguo\n";
@@ -30,8 +31,7 @@ int main() {
     vector<duration<double>> texec(nOfArrays);
     ofstream myfile ("exec.txt");
     cout << "scrivo su file\n";
-    if (myfile.is_open())
-    {
+    if (myfile.is_open()) {
         myfile << "exec time\n";
     }
     for(int i = 0; i < nOfArrays; i++) {
@@ -163,8 +163,8 @@ vector<duration<double>> execution() {
         while(k >= nElements) {
             k = k/2;
         }
-        vector<int> vec;
         start = steady_clock::now();
+        vector<int> vec;
         for(int j = 0; j < nTimes; j++) {
             vec.clear();
             vec = randomize(nElements);
