@@ -9,9 +9,10 @@ void quickSort(int* vec, int p, int q);
 int quickSelect(int* vec, int p, int q, int k);
 int heapSelect(MinHeap h1, MinHeap h2, int k);
 vector<duration<double>> initialization();
-vector<duration<double>> execution(vector<int> vec);
+vector<duration<double>> execution();
 
 int nOfArrays;
+int startingLength = 100;
 
 /*
     IMPARA:
@@ -19,14 +20,13 @@ int nOfArrays;
 */
 
 int main() {
-    nOfArrays = calcNumOfArrays(100);
-    vector<int> vec;
+    nOfArrays = calcNumOfArrays(startingLength);
     //cin >> vec;
     duration<double> res = resolution();
     cout << "inizializzo\n";
     vector<duration<double>> tinit = initialization();
     cout << "eseguo\n";
-    vector<duration<double>> ttot = execution(vec);
+    vector<duration<double>> ttot = execution();
     vector<duration<double>> texec(nOfArrays);
     ofstream myfile ("exec.txt");
     cout << "scrivo su file\n";
@@ -111,7 +111,7 @@ vector<duration<double>> initialization() {
         1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
-    int nElements = 100;
+    int nElements = startingLength;
     int nTimes = 100; //num of times we want to measure init time
     vector<duration<double>> tinit = vector<duration<double>>(nOfArrays);
 
@@ -135,14 +135,14 @@ vector<duration<double>> initialization() {
     return tinit;
 }
 
-vector<duration<double>> execution(vector<int> vec) {
+vector<duration<double>> execution() {
     /*
         nElements in array:
         100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
         1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
-    int nElements = 100;
+    int nElements = startingLength;
     int nTimes = 100; //num of times we want to measure init time
     vector<duration<double>> ttot = vector<duration<double>>(nOfArrays);
 
@@ -163,7 +163,7 @@ vector<duration<double>> execution(vector<int> vec) {
         while(k >= nElements) {
             k = k/2;
         }
-
+        vector<int> vec;
         start = steady_clock::now();
         for(int j = 0; j < nTimes; j++) {
             vec.clear();
