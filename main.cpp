@@ -57,6 +57,7 @@ vdd initialization() {
     {
         myfile << "n° elem\tinit time\tn° rip\n";
     }
+    cout << "n° elem\tinit time\tn° rip\n";
     for(int i = 0; i < nOfArrays; i++) {
         tinit[i] = initializeTime(nElements, nTimes);
 
@@ -82,7 +83,7 @@ void execution(vdd tinit) {
     vdd texec(nOfArrays);
     vector<double> std(nOfArrays);
     
-    cout << "i  n° elem\ttot time\tn° rip\tvariation\n";
+    cout << "i  n° elem\ttot time\tn° rip\tstandard dev\tstd/mean\n";
     steady_clock::time_point start, end;
     srand(time(NULL));
     for(int i = 0; i < nOfArrays; i++) {
