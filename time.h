@@ -23,6 +23,7 @@ using namespace chrono;
 double mean (vector<duration<double>> vec);
 //scarto quadratico medio
 double meanSquaredError (vector<duration<double>> vec);
+//scambia gli elementi
 void swap(vector<duration<double>> vec, int start, int finish);
 vector<duration<double>> resolutionVec(int n);
 duration<double> initializeTime(int nElements, int repetitions);
@@ -94,7 +95,7 @@ double mean (vector<duration<double>> vec) {
     for (auto i : vec) {
         sum += i;
     }
-    return sum.count()/vec.size();
+    return sum.count() / vec.size();
 }
 
 double meanSquaredError (vector<duration<double>> vec) {
@@ -181,6 +182,10 @@ int updateNumOfElem (int n) {
     return n += increase;
 }
 
+int updateNumOfTimes (int n, int i) { 
+    return i % 1 == 0 ? max(2, n - 3) : n;
+}
+
 int calcNumOfArrays(int startingLength) {
     int i = 0;
     int length = startingLength;
@@ -190,5 +195,28 @@ int calcNumOfArrays(int startingLength) {
     }
     return i;
 }
+
+//returns index of the minimum value in the array
+int minimum(vector<duration<double>> vec) {
+    int minIndex = 0;
+    for(int i = 1; i < vec.size(); i++) {
+        if(vec[i] < vec[minIndex]) {
+            minIndex = i;
+        }
+    }
+    return minIndex;
+}
+
+//returns index of the minimum value in the array
+int median(vector<duration<double>> vec) {
+    int medianIdx = 0;
+    for(int i = 1; i < vec.size(); i++) {
+        if(vec[i] < vec[medianIdx]) {
+            medianIdx = i;
+        }
+    }
+    return medianIdx;
+}
+
 
 #endif //PROJECTASD_1_TIME_H
