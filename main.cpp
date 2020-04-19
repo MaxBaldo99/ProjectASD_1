@@ -112,7 +112,7 @@ vector<duration<double>> initialization() {
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
     int nElements = startingLength;
-    int nTimes = 100; //num of times we want to measure init time
+    int nTimes = 200; //num of times we want to measure init time
     vector<duration<double>> tinit = vector<duration<double>>(nOfArrays);
 
     //output to file
@@ -128,7 +128,7 @@ vector<duration<double>> initialization() {
 
         myfile << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
 
-        nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
+        nTimes = i % 1 == 0 ? max(2, nTimes - 3) : nTimes;
         nElements = updateNumOfElem(nElements);
     }
     myfile.close();
@@ -143,42 +143,51 @@ vector<duration<double>> execution() {
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
     int nElements = startingLength;
-    int nTimes = 100; //num of times we want to measure init time
+    int nTimes = 200; //num of times we want to measure init time
     vector<duration<double>> ttot = vector<duration<double>>(nOfArrays);
+    vector<double> varationCalculated(nOfArrays);
 
     //output to file
     
     ofstream myfile ("tot.txt");
     if (myfile.is_open())
     {
-        myfile << "n° elem\ttot time\tn° rip\n";
+        myfile << "n° elem\ttot time\tn° rip\tvariation\n";
     }
     
-    cout << "i\tn° elem\ttot time\tn° rip\n";
+    cout << "i\tn° elem\ttot time\tn° rip\tvariation\n";
     steady_clock::time_point start, end;
     srand(time(NULL));
     for(int i = 0; i < nOfArrays; i++) {
-        int k;
-        k = rand();
-        while(k >= nElements) {
+        //vector to contain the 20 time to calulate std
+        vector<duration<double>> varationVec(20);
+        for(int h = 0; h < 20; h++) {
+            int k = rand();
+            while(k >= nElements) {
             k = k/2;
+            }
+            start = steady_clock::now();
+            vector<int> vec;
+            for(int j = 0; j < nTimes; j++) {
+                vec.clear();
+                vec = randomize(nElements);
+                //scegliere metodo
+                quickSelect(&vec[0], 0, vec.size() - 1, k);
+            }
+            end = steady_clock::now();
+            varationVec[h] = (duration<double>)((end - start) / nTimes);
+            if (i == 0) {
+                for (int z = 0; z < 20; z++) {
+                    cout << varationVec[z].count() << endl;
+                }
+            }
         }
-        start = steady_clock::now();
-        vector<int> vec;
-        for(int j = 0; j < nTimes; j++) {
-            vec.clear();
-            vec = randomize(nElements);
-            //scegliere metodo
-            quickSelect(&vec[0], 0, vec.size() - 1, k);
-        }
-        end = steady_clock::now();
-
+        varationCalculated[i] = meanSquaredError(varationVec);
         ttot[i] = (duration<double>)((end - start) / nTimes);
-        cout << i << ") " << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
+        cout << i << ") " << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\t" << varationCalculated[i] << "\n";
 
-        myfile << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\n";
-
-        nTimes = i % 1 == 0 ? max(2, nTimes - 1) : nTimes;
+        myfile << nElements << "\t" << ttot[i].count() << "\t" << nTimes << "\t" << varationCalculated[i] << "\n";
+        nTimes = i % 1 == 0 ? max(2, nTimes - 3) : nTimes;
         nElements = updateNumOfElem(nElements);
     }
     myfile.close();
