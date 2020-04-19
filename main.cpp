@@ -13,7 +13,7 @@ int heapSelect(MinHeap h1, MinHeap h2, int k);
 vdd initialization();
 void execution(vdd tinit);
 double tExecution(vdd *ttoti, vdd *tinit, vdd *texec, int i);
-void printToFile(vdd texec, int nElements, int nTimes, vector<double> std);
+void printToFile(vdd texec, vector<double> std);
 
 int nOfArrays;
 int startingLength = 100;
@@ -59,9 +59,8 @@ vdd initialization() {
     }
     for(int i = 0; i < nOfArrays; i++) {
         tinit[i] = initializeTime(nElements, nTimes);
-        //cout << (i+1) << ") n° elementi: " << nElements;
-        //cout << " => init time " << tinit[i].count() / nTimes << endl;
 
+        cout << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
         myfile << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
 
         nTimes = updateNumOfTimes(nTimes, i);
@@ -113,13 +112,20 @@ void execution(vdd tinit) {
         
         //std[i] = tExecution(&ttoti, &tinit, &texec, i);
         double stdPerc = std[i] / mean(ttoti);
-        cout << i << ") " << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\n";
+        if(i < 10) {
+            cout << 0;
+        }
+        cout << i << ") ";
+        if(nElements < 1000) {
+            cout << 0;
+        }
+        cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\n";
 
         nTimes = updateNumOfTimes(nTimes, i);
         nElements = updateNumOfElem(nElements);
     }
 
-    printToFile(texec, nElements, nTimes, std);
+    printToFile(texec, std);
 }
 
 double tExecution(vdd *ttoti, vdd *tinit, vdd *texec, int i) {
@@ -131,14 +137,18 @@ double tExecution(vdd *ttoti, vdd *tinit, vdd *texec, int i) {
     return meanSquaredError(*ttoti);
 }
 
-void printToFile(vdd texec, int nElements, int nTimes, vector<double> std) {
+void printToFile(vdd texec, vector<double> std) {
 
     ofstream myfile ("exec.txt");
     if (myfile.is_open()) {
         myfile << "exec time\n";
     }
+    int nElements = startingLength;
+    int nTimes = startingNumTimes;
     for(int i = 0; i < texec.size(); i++) {
         myfile << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\n";
+        nElements = updateNumOfElem(nElements);
+        nTimes = updateNumOfTimes(nTimes, i);
     }
     myfile.close();
 }

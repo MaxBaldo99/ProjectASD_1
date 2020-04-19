@@ -183,7 +183,7 @@ int updateNumOfElem (int n) {
 }
 
 int updateNumOfTimes (int n, int i) { 
-    return i % 1 == 0 ? max(2, n - 3) : n;
+    return i % 1 == 0 ? max(10, n - 3) : n;
 }
 
 int calcNumOfArrays(int startingLength) {
