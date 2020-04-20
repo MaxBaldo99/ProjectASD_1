@@ -197,9 +197,9 @@ int calcNumOfArrays(int startingLength) {
 }
 
 //returns index of the minimum value in the array
-int minimum(vector<duration<double>> vec) {
-    int minIndex = 0;
-    for(int i = 1; i < vec.size(); i++) {
+int minimum(vector<duration<double>> vec, int p, int q) {
+    int minIndex = p;
+    for(int i = p + 1; i < q; i++) {
         if(vec[i] < vec[minIndex]) {
             minIndex = i;
         }
@@ -210,10 +210,10 @@ int minimum(vector<duration<double>> vec) {
 //returns index of the minimum value in the array
 int median(vector<duration<double>> vec) {
     int medianIdx = 0;
-    for(int i = 1; i < vec.size(); i++) {
-        if(vec[i] < vec[medianIdx]) {
-            medianIdx = i;
-        }
+    for(int i = 0; i < vec.size() / 2; i++) {
+        int minIdx = minimum(vec, i, vec.size() - 1);
+        swap(vec, i, minIdx);
+        medianIdx++;
     }
     return medianIdx;
 }

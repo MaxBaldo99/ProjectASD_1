@@ -108,7 +108,8 @@ void execution(vdd tinit) {
         for(int j = 0; j < nExecSTD; j++) {
             ttoti[j] -= tinit[i];
         }
-        texec[i] = ttoti[minimum(ttoti)];
+        //texec[i] = ttoti[minimum(ttoti, 0, ttoti.size() - 1)];
+        texec[i] = (duration<double>) mean(ttoti);
         std[i] = meanSquaredError(ttoti);
         
         //std[i] = tExecution(&ttoti, &tinit, &texec, i);
@@ -128,7 +129,7 @@ void execution(vdd tinit) {
 
     printToFile(texec, std);
 }
-
+/*
 double tExecution(vdd *ttoti, vdd *tinit, vdd *texec, int i) {
     
     for(int j = 0; j < (*ttoti).size(); j++) {
@@ -136,18 +137,18 @@ double tExecution(vdd *ttoti, vdd *tinit, vdd *texec, int i) {
     }
     (*texec)[i] = (*ttoti)[minimum(*ttoti)];
     return meanSquaredError(*ttoti);
-}
+}*/
 
 void printToFile(vdd texec, vector<double> std) {
 
     ofstream myfile ("exec.txt");
     if (myfile.is_open()) {
-        myfile << "exec time\n";
+        myfile << "n° elem\texec time\tstd\tn° rip\n";
     }
     int nElements = startingLength;
     int nTimes = startingNumTimes;
     for(int i = 0; i < texec.size(); i++) {
-        myfile << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\n";
+        myfile << nElements << "\t" << texec[i].count() << "\t" << std[i] << "\t" << nTimes << "\n";
         nElements = updateNumOfElem(nElements);
         nTimes = updateNumOfTimes(nTimes, i);
     }
