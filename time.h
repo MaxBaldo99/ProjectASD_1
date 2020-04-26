@@ -167,7 +167,7 @@ int updateNumOfElem (int n) {
     } else if (n < pow(10, 6)) { //n < 1mln
         increase = 5 * pow(10, 4); //50k
     } else if (n < 5 * pow(10, 6)) { //n > 1 mln
-        increase = 2.5 * pow(10, 5); //25k
+        increase = 2.5 * pow(10, 5); //250k
     } else {
         n = -1;
         increase = 0;
