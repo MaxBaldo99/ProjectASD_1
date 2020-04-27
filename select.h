@@ -9,6 +9,9 @@ int MOMSelect(int *vec, int p, int q, int k);
 int partitionPivot(int *vec, int p, int q, int pivot);
 void quickSort(int* vec, int p, int q);
 
+
+
+
 /**
  * The procedure return the k-esim element (in k position) in the array vec.
  * WE ASSUME THAT K IS A VALID INDEX OF THE ARRAY
@@ -19,7 +22,8 @@ void quickSort(int* vec, int p, int q);
  * @return the element in the k position
  */
 int quickSelect(int* vec, int p, int q, int k) {
-    assert (k > 0 && k <= q - p + 1);       // we assume that k is in the interval of p and q
+    // we assume that k is in the interval of p and q
+    assert (k > 0 && k <= q - p + 1);      
     /*
     int index = partition(vec, p, q);
     if (index - p == k - 1) {

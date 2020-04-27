@@ -87,7 +87,7 @@ void execution(vdd tinit) {
         //vector to contain the 20 time to calulate std
         vdd ttoti(nExecSTD);
         for(int h = 0; h < nExecSTD; h++) {
-            int k = rand() % nElements;
+            int k = rand() % nElements + 1;
             start = steady_clock::now();
             vector<int> vec;
             for(int j = 0; j < nTimes; j++) {
