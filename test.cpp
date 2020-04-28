@@ -18,8 +18,10 @@ int main() {
         n += 50000;
         vector<int> vec(n);
         vec = randomize(n);
-        //cin >> vec;
         k = rand() % n + 1;
+        //vector<int> vec;
+        //cin >> vec;
+        //cin >> k;
         val = MOMSelect(&vec[0], 0, vec.size(), k);
         ok = checkSelect(&vec[0], vec.size(), k, val);
         cout << "n: " << n << ", k: " << k << ", val: " << val << ", ok: " << ok << endl;
