@@ -8,9 +8,8 @@ int heapSelect(MinHeap h1, MinHeap h2, int k);
 int MOMSelect(int *vec, int p, int q, int k);
 int partitionPivot(int *vec, int p, int q, int pivot);
 void quickSort(int* vec, int p, int q);
-
-
-
+void insertionSort(int *vec, int p, int q);
+bool checkSelect(int *vec, int size, int k, int val);
 
 /**
  * The procedure return the k-esim element (in k position) in the array vec.
@@ -77,10 +76,10 @@ int MOMSelect(int *vec, int p, int q, int k) {
     bLen = q % BLOCK_SIZE == 0 ? bLen : bLen + 1;
     int B[bLen];
     while (j < q) {
-        
         int limit = j + BLOCK_SIZE - 1;
         limit = limit < q ? limit : q - 1;
-        quickSort(vec, j, limit);
+        insertionSort(vec, j, limit);
+        //quickSort(vec, j, limit);
         B[blocks++] = vec[(j + limit) / 2];
         j += BLOCK_SIZE;
     }
@@ -131,4 +130,30 @@ void quickSort(int* vec, int p, int q) {
         quickSort(vec, p , r - 1);
         quickSort(vec, r + 1, q);
     }
+}
+
+void insertionSort(int *vec, int p, int q) {
+    for (int j = p + 1; j < q + 1; j++) {
+        int key = vec[j];
+        int i = j - 1;
+        while (i >= p && vec[i] > key) {
+            vec[i+1] = vec[i];
+            i--;
+        }
+        vec[i+1] = key;
+    }
+}
+
+bool checkSelect(int *vec, int size, int k, int val) {
+    int minors = 0;
+    int valIdx = 0;
+    for(int i = 0; i < size; i++) {
+        if(vec[i] <= val) {
+            minors++;
+            if(vec[i] > vec[valIdx]) {
+                valIdx = i;
+            }
+        }
+    }
+    return minors == k && val == vec[valIdx];
 }

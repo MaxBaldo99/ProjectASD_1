@@ -95,7 +95,7 @@ void execution(vdd tinit) {
                 vec = randomize(nElements);
                 //choose select algorithm
                 //quickSelect(&vec[0], 0, vec.size() - 1, k);
-                MOMSelect(&vec[0], 0, vec.size(), k);
+                int val = MOMSelect(&vec[0], 0, vec.size(), k);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
@@ -121,7 +121,7 @@ void execution(vdd tinit) {
         nElements = updateNumOfElem(nElements);
     }
 
-    printToFile(texec, std);
+    //printToFile(texec, std);
 }
 
 void printToFile(vdd texec, vector<double> std) {
