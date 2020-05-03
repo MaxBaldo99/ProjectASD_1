@@ -5,7 +5,8 @@
 
 int quickSelect(int* vec, int p, int q, int k);
 int heapSelect(MinHeap h1, MinHeap h2, int k);
-int MOMSelect(int *vec, int p, int q, int k);
+int MOMSelect(int *array, int left, int right, int target);
+int getMedianOfMedians(int *array, int left, int right);
 int partitionPivot(int *vec, int p, int q, int pivot);
 void quickSort(int* vec, int p, int q);
 void insertionSort(int *vec, int p, int q);
@@ -66,32 +67,44 @@ int heapSelect(MinHeap h1, MinHeap h2, int k) {
 
 //Median of Medians Select: 
 //T(n) = u(n) in best, median, worst case
-int MOMSelect(int *vec, int p, int q, int k) {    
-    if (p >= q - 1) {
-        return vec[p];
-    }    
-    int blocks = 0;
-    int j = p;
-    int bLen = (q / BLOCK_SIZE);
-    bLen = q % BLOCK_SIZE == 0 ? bLen : bLen + 1;
-    int B[bLen];
-    while (j < q) {
-        int limit = j + BLOCK_SIZE - 1;
-        limit = limit < q ? limit : q - 1;
-        insertionSort(vec, j, limit);
-        //quickSort(vec, j, limit);
-        B[blocks++] = vec[(j + limit) / 2];
-        j += BLOCK_SIZE;
+int MOMSelect(int *array, int left, int right, int target) {
+    int medianPos;
+    bool search = true;
+    while(search) {
+        int median = getMedianOfMedians(array, left, right);
+        //printArray(array, right, " ", "<<", ">>");
+        //printf("partition on %d\n", median);
+        medianPos = partitionPivot(array, left, right - 1, median);
+        //printf("median: %d, median pos: %d\n", median, medianPos);
+        //printArray(array, right, " ", "<<", ">>");
+        int k = medianPos - left + 1;
+        if (target < k) {
+            right = medianPos;
+        } else if (target > k) {
+            left = medianPos + 1;
+            target -= k;
+        } else {
+            search = false;
+        }
     }
-    int median = MOMSelect(B, 0, blocks, blocks/2);
-    int medianPos = partitionPivot(vec, p, q-1, median);
-    int target = medianPos - p + 1;
-    if (k == target) {
-        return vec[medianPos];
-    } else if (k < target) {
-        return MOMSelect(vec, p, medianPos, k);
+    return array[medianPos];
+}
+
+//support for MOM select
+int getMedianOfMedians(int *array, int left, int right) {
+    if(left >= right - 1) {
+        return array[left];
     } else {
-        return MOMSelect(vec, medianPos+1, q, k-target);
+        int interval = right - left;
+        int bLen = (interval / BLOCK_SIZE) + min(1, interval % BLOCK_SIZE);
+        int blocks = 0;
+        int B[bLen];
+        for(int i = left; i < right; i += BLOCK_SIZE) {
+            int limit = min(i + BLOCK_SIZE - 1, right - 1);
+            insertionSort(array, i, limit);
+            B[blocks++] = array[(i + limit) / 2];
+        }
+        return getMedianOfMedians(B, 0, bLen);
     }
 }
 
@@ -144,6 +157,7 @@ void insertionSort(int *vec, int p, int q) {
     }
 }
 
+//checks if select output is correct
 bool checkSelect(int *vec, int size, int k, int val) {
     int minors = 0;
     int valIdx = 0;
