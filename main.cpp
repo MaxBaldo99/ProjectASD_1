@@ -61,7 +61,7 @@ vdd initialization() {
         cout << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
         myfile << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
 
-        nTimes = updateNumOfTimes(nTimes, i);
+        nTimes = updateNumOfTimes(nTimes);
         nElements = updateNumOfElem(nElements);
     }
     myfile.close();
@@ -94,8 +94,8 @@ void execution(vdd tinit) {
                 vec.clear();
                 vec = randomize(nElements);
                 //choose select algorithm
-                quickSelect(&vec[0], 0, vec.size() - 1, k);
-                //MOMSelect(&vec[0], 0, vec.size(), k);
+                //quickSelect(&vec[0], 0, vec.size() - 1, k);
+                MOMSelect(&vec[0], 0, vec.size(), k);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
@@ -117,7 +117,7 @@ void execution(vdd tinit) {
         }
         cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\n";
 
-        nTimes = updateNumOfTimes(nTimes, i);
+        nTimes = updateNumOfTimes(nTimes);
         nElements = updateNumOfElem(nElements);
     }
 
@@ -135,7 +135,7 @@ void printToFile(vdd texec, vector<double> std) {
     for(int i = 0; i < texec.size(); i++) {
         myfile << nElements << "\t" << texec[i].count() << "\t" << std[i] << "\t" << nTimes << "\n";
         nElements = updateNumOfElem(nElements);
-        nTimes = updateNumOfTimes(nTimes, i);
+        nTimes = updateNumOfTimes(nTimes);
     }
     myfile.close();
 }

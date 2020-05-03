@@ -29,7 +29,13 @@ vector<duration<double>> resolutionVec(int n);
 duration<double> initializeTime(int nElements, int repetitions);
 duration<double> resolution();
 vector<int> randomize(int nElements);
-int updateNumOfElem (int n);
+
+int updateNumOfElem(int n);
+int updateNumOfTimes(int n);
+int calcNumOfArrays(int startingLength);
+
+int minimum(vector<duration<double>> vec, int p, int q);
+int median(vector<duration<double>> vec);
 
 
 void time () {
@@ -182,8 +188,8 @@ int updateNumOfElem (int n) {
     return n += increase;
 }
 
-int updateNumOfTimes (int n, int i) { 
-    return i % 1 == 0 ? max(5, n - 10) : n;
+int updateNumOfTimes (int n) { 
+    return max(5, n - 7);
 }
 
 int calcNumOfArrays(int startingLength) {
