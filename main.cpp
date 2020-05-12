@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <fstream>
+#include <string>
 #include "utility.h"
 #include "time.h"
 #include "chrono"
@@ -18,6 +19,7 @@ void printToFile(vdd texec, vector<double> std);
 #define startingNumTimes 200
 #define nExecSTD 20
 int nOfArrays;
+std::string path = "tempi/";
 
 /*
     IMPARA:
@@ -49,7 +51,7 @@ vdd initialization() {
     vdd tinit = vdd(nOfArrays);
 
     //output to file
-    ofstream myfile ("init.txt");
+    ofstream myfile (path + "init.txt");
     if (myfile.is_open())
     {
         myfile << "n° elem\tinit time\tn° rip\n";
@@ -126,7 +128,7 @@ void execution(vdd tinit) {
 
 void printToFile(vdd texec, vector<double> std) {
 
-    ofstream myfile ("exec.txt");
+    ofstream myfile (path + "exec.txt");
     if (myfile.is_open()) {
         myfile << "n° elem\texec time\tstd\tn° rip\n";
     }
