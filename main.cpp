@@ -1,7 +1,5 @@
 #include <assert.h>
 #include <fstream>
-#include <string>
-#include "utility.h"
 #include "time.h"
 #include "chrono"
 #include "select.h"
@@ -16,10 +14,9 @@ double tExecution(vdd *ttoti, vdd *tinit, vdd *texec, int i);
 void printToFile(vdd texec, vector<double> std);
 
 #define startingLength 100
-#define startingNumTimes 200
+#define startingNumTimes 150
 #define nExecSTD 20
 int nOfArrays;
-std::string path = "tempi/";
 
 /*
     IMPARA:
@@ -51,7 +48,7 @@ vdd initialization() {
     vdd tinit = vdd(nOfArrays);
 
     //output to file
-    ofstream myfile (path + "init.txt");
+    ofstream myfile ("init.txt");
     if (myfile.is_open())
     {
         myfile << "n° elem\tinit time\tn° rip\n";
@@ -89,7 +86,8 @@ void execution(vdd tinit) {
         //vector to contain the 20 time to calulate std
         vdd ttoti(nExecSTD);
         for(int h = 0; h < nExecSTD; h++) {
-            int k = rand() % nElements + 1;
+            //int k = rand() % nElements + 1;
+            int k = nElements / 4;
             start = steady_clock::now();
             vector<int> vec;
             for(int j = 0; j < nTimes; j++) {
@@ -97,7 +95,8 @@ void execution(vdd tinit) {
                 vec = randomize(nElements);
                 //choose select algorithm
                 //quickSelect(&vec[0], 0, vec.size() - 1, k);
-                MOMSelect(&vec[0], 0, vec.size(), k);
+                //MOMSelect(&vec[0], 0, vec.size(), k);
+                callHeapSelect(vec, vec.size()-1, k);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
@@ -128,7 +127,7 @@ void execution(vdd tinit) {
 
 void printToFile(vdd texec, vector<double> std) {
 
-    ofstream myfile (path + "exec.txt");
+    ofstream myfile ("exec.txt");
     if (myfile.is_open()) {
         myfile << "n° elem\texec time\tstd\tn° rip\n";
     }

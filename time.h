@@ -1,16 +1,14 @@
 #ifndef PROJECTASD_1_TIME_H
 #define PROJECTASD_1_TIME_H
 
-#include "chrono"
-#include "math.h"
+#include <chrono>
+#include <cmath>
 #include <iostream>
-#include "vector"
+#include <vector>
 #include <cstdlib>
 #include <fstream>
 using namespace std;
 using namespace chrono;
-
-#define max(x, y) (((x) > (y)) ? (x) : (y))
 
 /*
 //ritorna altezza nodo, 0 se nodo è null
@@ -162,7 +160,7 @@ vector<int> randomize(int nElements) {
 int updateNumOfElem (int n) {
 
     int increase = 100;
-    if(n < pow(10, 3)) { //n < 1k
+    /*if(n < pow(10, 3)) { //n < 1k
         increase = pow(10, 2); //0.1k
     } else if(n < pow(10, 4)) { //n < 10k
         increase = pow(10, 3); //1k
@@ -174,6 +172,20 @@ int updateNumOfElem (int n) {
         increase = 5 * pow(10, 4); //50k
     } else if (n < 5 * pow(10, 6)) { //n > 1 mln
         increase = 2.5 * pow(10, 5); //250k
+    } else {
+        n = -1;
+        increase = 0;
+    }*/
+    if(n < pow(10, 3)) { //n < 1k
+        increase = pow(10, 2); //0.1k
+    } else if(n < pow(10, 4)) { //n < 10k
+        increase = pow(10, 3); //1k
+    } else if(n < pow(10, 5)) { //n < 100k
+        increase = pow(10, 4); //10k
+    } else if (n < pow(10, 6)) { //n < 1mln
+        increase = pow(10, 5); //100k
+    } else if (n < 5 * pow(10, 6)) { //n < 5 mln
+        increase = pow(10, 6); // 1 mln
     } else {
         n = -1;
         increase = 0;

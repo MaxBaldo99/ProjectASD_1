@@ -1,14 +1,16 @@
-#include "utility.h"
+#include "minheap.h"
 #include <assert.h>
 
 #define BLOCK_SIZE 5
 
 int quickSelect(int* vec, int p, int q, int k);
-int heapSelect(MinHeap h1, MinHeap h2, int k);
+int heapSelect(MinHeap* h1, supportMeanHeap* h2, int k);
+int callHeapSelect(vector<int> vec, int size, int k);
 int MOMSelect(int *array, int left, int right, int target);
 int getMedianOfMedians(int *array, int left, int right);
 int partitionPivot(int *vec, int p, int q, int pivot);
 void quickSort(int* vec, int p, int q);
+int partition(int* vec, int p, int q);
 void insertionSort(int *vec, int p, int q);
 bool checkSelect(int *vec, int size, int k, int val);
 
@@ -47,22 +49,30 @@ int quickSelect(int* vec, int p, int q, int k) {
     return -1;
 }
 
-int heapSelect(MinHeap h1, MinHeap h2, int k) {
-    h1.buildMinHeap();
-    cout << h1.vec;
-    h2.insert(0);       //inserisco la posizione nella seconda miHeap
+int heapSelect(MinHeap* h1, supportMeanHeap* h2, int k) {
+    int root = h1->getRoot();
+    h2->insert(root,0);       //inserisco la radice della prima MinHeap nella seconda MinHeap
     for (int i = 0; i < k-1; ++i) {
-        int nodePosition = h2.extract();
-        if (nodePosition == 0) {
-            h2.insert(2 * nodePosition + 1);
-            h2.insert(2 * nodePosition + 2);
-        } else {
-            h2.insert(2 * nodePosition);
-            h2.insert(2 * nodePosition + 1);
+        int newKeyPosition = h2->extractPos();
+        //if (newKeyPosition <= (h1->heapsize/2)-1) {
+        if(h1->leftSon(newKeyPosition) <= h1->heapsize) {
+            h2->insert(h1->vec[h1->leftSon(newKeyPosition)], h1->leftSon(newKeyPosition));
+            if(h1->rightSon(newKeyPosition) <= h1->heapsize) {
+                h2->insert(h1->vec[h1->rightSon(newKeyPosition)], h1->rightSon(newKeyPosition));
+            }
         }
+        assert(isMinHeap(h1));
+        assert(isMinHeapSupport(h2));
     }
-    int last = h2.extract();
-    return h1.vec[last];
+    int last = h2->nodePos[0].first;
+    return last;
+}
+
+int callHeapSelect(vector<int> vec, int size, int k) {
+    MinHeap h1 = MinHeap(vec, size);
+    supportMeanHeap h2;
+    h1.buildMinHeap();
+    return heapSelect(&h1, &h2, k);
 }
 
 //Median of Medians Select: 
@@ -143,6 +153,18 @@ void quickSort(int* vec, int p, int q) {
         quickSort(vec, p , r - 1);
         quickSort(vec, r + 1, q);
     }
+}
+
+int partition(int* vec, int p, int q) {
+    int x = vec[q];
+    int i = p - 1;
+    for (int j = p; j <= q; ++j) {
+        if (vec[j] <= x) {
+            i++;
+            swap(vec, i, j);
+        }
+    }
+    return i;
 }
 
 void insertionSort(int *vec, int p, int q) {
