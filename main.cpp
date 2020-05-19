@@ -33,6 +33,11 @@ int main() {
     //cin >> vec;
     res = resolution();
     cout << "resolution: " << res.count() << "\n";
+    ofstream myfile ("tempi/resolution.txt");
+    if (myfile.is_open()) {
+        myfile << "resolution:\n" << res.count();
+    }
+    myfile.close();
     cout << "inizializzo\n";
     vdd tinit = initialization();
     cout << "eseguo\n";
@@ -55,7 +60,7 @@ vdd initialization() {
     vdd tinit = vdd(nOfArrays);
 
     //output to file
-    ofstream myfile ("init.txt");
+    ofstream myfile ("tempi/init.txt");
     if (myfile.is_open())
     {
         myfile << "n° elem\tinit time\tn° rip\n";
@@ -119,6 +124,7 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
         if(measuredError < relativeError) {
             //DO IT AGAIN ERROR IS NOT RESPECTED
             i--;
+            cout << "time is lower than relative error -----------------------------------\n";
         } else {
             //TIME IS OK SAVE RESULTS
             double stdPerc = std[i] / mean(ttoti);
@@ -140,16 +146,16 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
 
 void printToFile(vdd texec, vector<double> std, int type) {
 
-    ofstream myfile (getAlgorithmName(type) + " exec.txt");
+    ofstream myfile ("tempi/" + getAlgorithmName(type) + " exec.txt");
     if (myfile.is_open()) {
         myfile << "n° elem\texec time\tstd\tn° rip\n";
-    }
-    int nElements = startingLength;
-    int nTimes = startingNumTimes;
-    for(int i = 0; i < texec.size(); i++) {
-        myfile << nElements << "\t" << texec[i].count() << "\t" << std[i] << "\t" << nTimes << "\n";
-        nElements = updateNumOfElem(nElements);
-        nTimes = updateNumOfTimes(nTimes);
+        int nElements = startingLength;
+        int nTimes = startingNumTimes;
+        for(int i = 0; i < texec.size(); i++) {
+            myfile << nElements << "\t" << texec[i].count() << "\t" << std[i] << "\t" << nTimes << "\n";
+            nElements = updateNumOfElem(nElements);
+            nTimes = updateNumOfTimes(nTimes);
+        }
     }
     myfile.close();
 }
