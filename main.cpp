@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <fstream>
 #include <functional>
+#include <iostream>
 #include "time.h"
 #include "chrono"
 #include "select.h"
@@ -10,29 +11,34 @@ using namespace chrono;
 #define vdd vector<duration<double>>
 
 vdd initialization();
-void execution(vdd tinit);
+void execution(vdd tinit, int type, int (*function)(vector<int> vec, int left, int right, int k));
 double tExecution(vdd *ttoti, vdd *tinit, vdd *texec, int i);
-void printToFile(vdd texec, vector<double> std);
+void printToFile(vdd texec, vector<double> std, int type);
+string getAlgorithmName(int type);
 
 #define startingLength 100
 #define startingNumTimes 150
 #define nExecSTD 20
 int nOfArrays;
 
-/*
-    IMPARA:
-    '\n' >>>>>>>>>>>>>>> endl
-*/
+#define HEAP 0
+#define QUICK 1
+#define MOM 2
+
+duration<double> res;
+#define RELATIVE_ERROR 0.01
 
 int main() {
     nOfArrays = calcNumOfArrays(startingLength);
     //cin >> vec;
-    duration<double> res = resolution();
+    res = resolution();
     cout << "resolution: " << res.count() << "\n";
     cout << "inizializzo\n";
     vdd tinit = initialization();
     cout << "eseguo\n";
-    execution(tinit);
+    execution(tinit, HEAP, &callHeapSelect);
+    execution(tinit, QUICK, &quickSelect);
+    execution(tinit, MOM, &MOMSelect);
     return 0;
     
 }
@@ -68,7 +74,7 @@ vdd initialization() {
     return tinit;
 }
 
-void execution(vdd tinit) {
+void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int)) {
     /*
         nElements in array:
         100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
@@ -79,7 +85,7 @@ void execution(vdd tinit) {
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd texec(nOfArrays);
     vector<double> std(nOfArrays);
-    
+    cout << getAlgorithmName(type) << endl;
     cout << "i  n° elem\ttot time\tn° rip\tstandard dev\tstd/mean\n";
     steady_clock::time_point start, end;
     srand(time(NULL));
@@ -87,8 +93,7 @@ void execution(vdd tinit) {
         //vector to contain the 20 time to calulate std
         vdd ttoti(nExecSTD);
         for(int h = 0; h < nExecSTD; h++) {
-            //int k = rand() % nElements + 1;
-            int k = nElements / 4;
+            int k = type == 0 ? nElements / 4 : rand() % nElements + 1;
             start = steady_clock::now();
             vector<int> vec;
             for(int j = 0; j < nTimes; j++) {
@@ -97,7 +102,8 @@ void execution(vdd tinit) {
                 //choose select algorithm
                 //quickSelect(vec, 0, vec.size(), k);
                 //MOMSelect(vec, 0, vec.size(), k);
-                callHeapSelect(vec, 0, vec.size(), k);
+                //callHeapSelect(vec, 0, vec.size(), k);
+                std::__invoke(function, vec, 0, nElements, k);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
@@ -108,27 +114,31 @@ void execution(vdd tinit) {
         }
         texec[i] = (duration<double>) mean(ttoti);
         std[i] = meanSquaredError(ttoti);
-        
-        double stdPerc = std[i] / mean(ttoti);
-        if(i < 10) {
-            cout << 0;
-        }
-        cout << i << ") ";
-        if(nElements < 1000) {
-            cout << 0;
-        }
-        cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\n";
+        if(texec[i].count() < res.count() / RELATIVE_ERROR + res.count()) {
+            //DO IT AGAIN ERROR IS NOT RESPECTED
+            i--;
+        } else {
+            //TIME IS OK SAVE RESULTS
+            double stdPerc = std[i] / mean(ttoti);
+            if(i < 10) {
+                cout << 0;
+            }
+            cout << i << ") ";
+            if(nElements < 1000) {
+                cout << 0;
+            }
+            cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\n";
 
-        nTimes = updateNumOfTimes(nTimes);
-        nElements = updateNumOfElem(nElements);
+            nTimes = updateNumOfTimes(nTimes);
+            nElements = updateNumOfElem(nElements);
+        }
     }
-
-    printToFile(texec, std);
+    printToFile(texec, std, type);
 }
 
-void printToFile(vdd texec, vector<double> std) {
+void printToFile(vdd texec, vector<double> std, int type) {
 
-    ofstream myfile ("exec.txt");
+    ofstream myfile (getAlgorithmName(type) + " exec.txt");
     if (myfile.is_open()) {
         myfile << "n° elem\texec time\tstd\tn° rip\n";
     }
@@ -140,4 +150,15 @@ void printToFile(vdd texec, vector<double> std) {
         nTimes = updateNumOfTimes(nTimes);
     }
     myfile.close();
+}
+
+string getAlgorithmName(int type) {
+    if(type == HEAP) {
+        return "heap";
+    } else if(type == QUICK) {
+        return "quick";
+    } else if(type == MOM) {
+        return "mom";
+    }
+    return NULL;
 }
