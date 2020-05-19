@@ -93,7 +93,7 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
         //vector to contain the 20 time to calulate std
         vdd ttoti(nExecSTD);
         for(int h = 0; h < nExecSTD; h++) {
-            int k = type == 0 ? nElements / 4 : rand() % nElements + 1;
+            int k = type == HEAP ? nElements / 4 : rand() % nElements + 1;
             start = steady_clock::now();
             vector<int> vec;
             for(int j = 0; j < nTimes; j++) {
@@ -114,7 +114,9 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
         }
         texec[i] = (duration<double>) mean(ttoti);
         std[i] = meanSquaredError(ttoti);
-        if(texec[i].count() < res.count() / RELATIVE_ERROR + res.count()) {
+        double measuredError = texec[i].count() * nTimes;
+        double relativeError = res.count() / RELATIVE_ERROR + res.count();
+        if(measuredError < relativeError) {
             //DO IT AGAIN ERROR IS NOT RESPECTED
             i--;
         } else {
