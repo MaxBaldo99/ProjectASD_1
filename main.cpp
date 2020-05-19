@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <fstream>
+#include <functional>
 #include "time.h"
 #include "chrono"
 #include "select.h"
@@ -94,9 +95,9 @@ void execution(vdd tinit) {
                 vec.clear();
                 vec = randomize(nElements);
                 //choose select algorithm
-                //quickSelect(&vec[0], 0, vec.size() - 1, k);
-                //MOMSelect(&vec[0], 0, vec.size(), k);
-                callHeapSelect(vec, vec.size()-1, k);
+                //quickSelect(vec, 0, vec.size(), k);
+                //MOMSelect(vec, 0, vec.size(), k);
+                callHeapSelect(vec, 0, vec.size(), k);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);

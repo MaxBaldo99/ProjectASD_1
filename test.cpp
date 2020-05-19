@@ -23,7 +23,7 @@ int main() {
         vector<int> vec(n);
         vec = randomize(n);
         k = rand() % n + 1;
-        val = MOMSelect(&vec[0], 0, vec.size(), k);
+        val = MOMSelect(vec, 0, vec.size(), k);
         ok = checkSelect(&vec[0], vec.size(), k, val);
         cout << "n: " << n << ", k: " << k << ", val: " << val << ", ok: " << ok << endl;
     }

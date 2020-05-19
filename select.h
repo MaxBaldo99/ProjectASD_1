@@ -3,10 +3,10 @@
 
 #define BLOCK_SIZE 5
 
-int quickSelect(int* vec, int p, int q, int k);
+int quickSelect(vector<int> vec, int left, int right, int k);
+int callHeapSelect(vector<int> vec, int left, int right, int k);
+int MOMSelect(vector<int> vec, int left, int right, int k);
 int heapSelect(MinHeap* h1, supportMeanHeap* h2, int k);
-int callHeapSelect(vector<int> vec, int size, int k);
-int MOMSelect(int *array, int left, int right, int target);
 int getMedianOfMedians(int *array, int left, int right);
 int partitionPivot(int *vec, int p, int q, int pivot);
 void quickSort(int* vec, int p, int q);
@@ -23,9 +23,9 @@ bool checkSelect(int *vec, int size, int k, int val);
  * @param k is the position which is the element to return. REQUIRED is major or equal 0 and minus or equals vec.length -1
  * @return the element in the k position
  */
-int quickSelect(int* vec, int p, int q, int k) {
+int quickSelect(vector<int> vec, int left, int right, int k) {
     // we assume that k is in the interval of p and q
-    assert (k > 0 && k <= q - p + 1);      
+    assert (k > 0 && k <= right - left);      
     /*
     int index = partition(vec, p, q);
     if (index - p == k - 1) {
@@ -36,14 +36,14 @@ int quickSelect(int* vec, int p, int q, int k) {
     }
     return quickSelect(vec, index + 1, q, k - index + p - 1);
     */
-   while (p <= q) { 
-        int index = partition(vec, p, q); 
+   while (left < right) { 
+        int index = partition(&vec[0], left, right); 
         if (index == k - 1) {
             return vec[index]; 
         } else if (index > k - 1) {
-            q = index - 1;
+            right = index - 1;
         } else {
-            p = index + 1; 
+            left = index + 1; 
         }
     } 
     return -1;
@@ -68,8 +68,8 @@ int heapSelect(MinHeap* h1, supportMeanHeap* h2, int k) {
     return last;
 }
 
-int callHeapSelect(vector<int> vec, int size, int k) {
-    MinHeap h1 = MinHeap(vec, size);
+int callHeapSelect(vector<int> vec, int left, int right, int k) {
+    MinHeap h1 = MinHeap(vec, right - 1);
     supportMeanHeap h2;
     h1.buildMinHeap();
     return heapSelect(&h1, &h2, k);
@@ -77,27 +77,27 @@ int callHeapSelect(vector<int> vec, int size, int k) {
 
 //Median of Medians Select: 
 //T(n) = u(n) in best, median, worst case
-int MOMSelect(int *array, int left, int right, int target) {
+int MOMSelect(vector<int> vec, int left, int right, int k) {
     int medianPos;
     bool search = true;
     while(search) {
-        int median = getMedianOfMedians(array, left, right);
+        int median = getMedianOfMedians(&vec[0], left, right);
         //printArray(array, right, " ", "<<", ">>");
         //printf("partition on %d\n", median);
-        medianPos = partitionPivot(array, left, right - 1, median);
+        medianPos = partitionPivot(&vec[0], left, right - 1, median);
         //printf("median: %d, median pos: %d\n", median, medianPos);
         //printArray(array, right, " ", "<<", ">>");
-        int k = medianPos - left + 1;
-        if (target < k) {
+        int target = medianPos - left + 1;
+        if (k < target) {
             right = medianPos;
-        } else if (target > k) {
+        } else if (k > target) {
             left = medianPos + 1;
-            target -= k;
+            k -= target;
         } else {
             search = false;
         }
     }
-    return array[medianPos];
+    return vec[medianPos];
 }
 
 //support for MOM select
