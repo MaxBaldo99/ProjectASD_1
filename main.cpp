@@ -15,6 +15,7 @@ void execution(vdd tinit, int type, int (*function)(vector<int> vec, int left, i
 double tExecution(vdd *ttoti, vdd *tinit, vdd *texec, int i);
 void printToFile(vdd texec, vector<double> std, int type);
 string getAlgorithmName(int type);
+void callAlgorithm(int type, vector<int> vec, int left, int right, int k);
 
 #define startingLength 100
 #define startingNumTimes 150
@@ -42,8 +43,8 @@ int main() {
     vdd tinit = initialization();
     cout << "eseguo\n";
     execution(tinit, HEAP, &callHeapSelect);
-    execution(tinit, QUICK, &quickSelect);
-    execution(tinit, MOM, &MOMSelect);
+    //execution(tinit, QUICK, &quickSelect);
+    //execution(tinit, MOM, &MOMSelect);
     return 0;
     
 }
@@ -108,7 +109,8 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
                 //quickSelect(vec, 0, vec.size(), k);
                 //MOMSelect(vec, 0, vec.size(), k);
                 //callHeapSelect(vec, 0, vec.size(), k);
-                std::__invoke(function, vec, 0, nElements, k);
+                callAlgorithm(type, vec, 0, nElements, k);
+                //std::__invoke(function, vec, 0, nElements, k);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
@@ -142,6 +144,16 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
         }
     }
     printToFile(texec, std, type);
+}
+
+void callAlgorithm(int type, vector<int> vec, int left, int right, int k) {
+    if(type == HEAP) {
+        callHeapSelect(vec, left, right, k);
+    } else if(type == QUICK) {
+        quickSelect(vec, left, right, k);
+    } else if(type == MOM) {
+        MOMSelect(vec, left, right, k);
+    }
 }
 
 void printToFile(vdd texec, vector<double> std, int type) {
