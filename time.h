@@ -160,7 +160,7 @@ vector<int> randomize(int nElements) {
 int updateNumOfElem (int n) {
 
     int increase = 100;
-    /*if(n < pow(10, 3)) { //n < 1k
+    if(n < pow(10, 3)) { //n < 1k
         increase = pow(10, 2); //0.1k
     } else if(n < pow(10, 4)) { //n < 10k
         increase = pow(10, 3); //1k
@@ -175,8 +175,8 @@ int updateNumOfElem (int n) {
     } else {
         n = -1;
         increase = 0;
-    }*/
-    if(n < pow(10, 3)) { //n < 1k
+    }
+    /*if(n < pow(10, 3)) { //n < 1k
         increase = pow(10, 2); //0.1k
     } else if(n < pow(10, 4)) { //n < 10k
         increase = pow(10, 3); //1k
@@ -189,7 +189,7 @@ int updateNumOfElem (int n) {
     } else {
         n = -1;
         increase = 0;
-    }
+    }*/
     /*
     int i = 0;
     while (i < 6 && n < pow(10, i+3)) {
