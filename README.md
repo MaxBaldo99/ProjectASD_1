@@ -1,7 +1,7 @@
 # ProjectASD
 This is the project of Algorithm and Data Structure of UniUd
 
-Part one:
+# Part one
 Selection algorithms
 Implement and compare these three algorithms:
     - quick select
@@ -19,7 +19,7 @@ Implement and compare these three algorithms:
     - [x] compare sperimental and asyntotic data
 - [ ] Write the final relation with graphs of data found
 
-Part two:
+# Part two
 Binary Search Trees (BST)
 Implement and compare these three tyes of BST:
     - generic BST (non balanced)
