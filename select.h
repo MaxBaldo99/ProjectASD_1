@@ -61,8 +61,8 @@ int heapSelect(MinHeap* h1, supportMeanHeap* h2, int k) {
                 h2->insert(h1->vec[h1->rightSon(newKeyPosition)], h1->rightSon(newKeyPosition));
             }
         }
-        assert(isMinHeap(h1));
-        assert(isMinHeapSupport(h2));
+        //assert(isMinHeap(h1));
+        //assert(isMinHeapSupport(h2));
     }
     int last = h2->nodePos[0].first;
     return last;

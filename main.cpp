@@ -42,9 +42,14 @@ int main() {
     cout << "inizializzo\n";
     vdd tinit = initialization();
     cout << "eseguo\n";
-    execution(tinit, HEAP, &callHeapSelect);
     execution(tinit, QUICK, &quickSelect);
     execution(tinit, MOM, &MOMSelect);
+    execution(tinit, HEAP, &callHeapSelect);
+<<<<<<< HEAD
+    execution(tinit, QUICK, &quickSelect);
+    execution(tinit, MOM, &MOMSelect);
+=======
+>>>>>>> 1e3b3851e5fd37c0597ed10850f1bf5fba6574f2
     return 0;
     
 }
