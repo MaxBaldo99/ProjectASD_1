@@ -43,8 +43,8 @@ int main() {
     vdd tinit = initialization();
     cout << "eseguo\n";
     execution(tinit, HEAP, &callHeapSelect);
-    //execution(tinit, QUICK, &quickSelect);
-    //execution(tinit, MOM, &MOMSelect);
+    execution(tinit, QUICK, &quickSelect);
+    execution(tinit, MOM, &MOMSelect);
     return 0;
     
 }
@@ -109,8 +109,8 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
                 //quickSelect(vec, 0, vec.size(), k);
                 //MOMSelect(vec, 0, vec.size(), k);
                 //callHeapSelect(vec, 0, vec.size(), k);
-                callAlgorithm(type, vec, 0, nElements, k);
-                //std::__invoke(function, vec, 0, nElements, k);
+                //callAlgorithm(type, vec, 0, nElements, k);
+                std::__invoke(function, vec, 0, nElements, k);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
