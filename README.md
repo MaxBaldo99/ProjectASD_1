@@ -12,7 +12,7 @@ Implement and compare these three algorithms:
 - [x] Calculate the resolution of your device
 - [x] Write the code of the three algorithms 
 - [x] Execute them
-- [x] prove their theorical complexity:
+- [x] Prove their theorical complexity:
     - [x] take time needed for the execution of each algorithm, with different array dimensions
     - [x] re-execute it if 1% relative error is not respected
     - [x] save and store all data about execution time spent and its standard deviation
@@ -28,11 +28,13 @@ Implement and compare these three tyes of BST:
 * Adelson-Velskij e Landis (AVL)
 
 # ToDo:
-same as on top, but execution has the scheme:
+
+Same as on top, but execution has the scheme:
 - [ ] generate empty BST
 - [ ] generate randomly n numbers [n1, ..., nn]
 - [ ] find ni in BST, if not found then insert it in BST  
-at the end of computation will be done:
+
+At the end of computation will be done:
 * number of finds: n
 * number of insert: m
 * m <= n
