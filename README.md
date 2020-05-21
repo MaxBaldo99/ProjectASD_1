@@ -1,14 +1,14 @@
 # ProjectASD
 This is the project of Algorithm and Data Structure of UniUd
 
-# Part one
+## Part one
 Selection algorithms
 Implement and compare these three algorithms:
 * Quick Select
 * Median of Medians Select
 * Heap Select
 
-# ToDo:
+### ToDo:
 - [x] Calculate the resolution of your device
 - [x] Write the code of the three algorithms 
 - [x] Execute them
@@ -20,14 +20,16 @@ Implement and compare these three algorithms:
     - [x] compare sperimental and asyntotic data
 - [ ] Write the final relation with graphs of data found
 
-# Part two
+[Link for relation] (https://drive.google.com/open?id=1RBXC6th5qzl4aEK_ah5653H4VoKP_PkQs3e1rcd3mQo)
+
+## Part two
 Binary Search Trees (BST)
 Implement and compare these three tyes of BST:
 * Generic BST (non balanced)
 * Red-Black Tree (RBT)
 * Adelson-Velskij e Landis (AVL)
 
-# ToDo:
+#### ToDo:
 
 Same as on top, but execution has the scheme:
 - [ ] generate empty BST
