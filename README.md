@@ -20,7 +20,7 @@ Implement and compare these three algorithms:
     - [x] compare sperimental and asyntotic data
 - [ ] Write the final relation with graphs of data found
 
-[Link for relation] (https://drive.google.com/open?id=1RBXC6th5qzl4aEK_ah5653H4VoKP_PkQs3e1rcd3mQo)
+[Link for relation](https://drive.google.com/open?id=1RBXC6th5qzl4aEK_ah5653H4VoKP_PkQs3e1rcd3mQo)
 
 ## Part two
 Binary Search Trees (BST)
@@ -29,7 +29,7 @@ Implement and compare these three tyes of BST:
 * Red-Black Tree (RBT)
 * Adelson-Velskij e Landis (AVL)
 
-#### ToDo:
+### ToDo:
 
 Same as on top, but execution has the scheme:
 - [ ] generate empty BST
