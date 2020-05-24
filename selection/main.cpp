@@ -12,7 +12,6 @@ using namespace chrono;
 
 vdd initialization();
 void execution(vdd tinit, int type, int (*function)(vector<int> vec, int left, int right, int k));
-double tExecution(vdd *ttoti, vdd *tinit, vdd *texec, int i);
 void printToFile(vdd texec, vector<double> std, int type);
 string getAlgorithmName(int type);
 void callAlgorithm(int type, vector<int> vec, int left, int right, int k);

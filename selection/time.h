@@ -236,5 +236,4 @@ int median(vector<duration<double>> vec) {
     return medianIdx;
 }
 
-
 #endif //PROJECTASD_1_TIME_H
