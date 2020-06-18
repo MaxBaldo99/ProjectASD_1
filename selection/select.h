@@ -25,7 +25,7 @@ bool checkSelect(int *vec, int size, int k, int val);
  */
 int quickSelect(vector<int> vec, int left, int right, int k) {
     // we assume that k is in the interval of p and q
-    assert (k > 0 && k <= right - left);      
+    //assert (k > 0 && k <= right - left);      
     /*
     int index = partition(vec, p, q);
     if (index - p == k - 1) {
@@ -37,11 +37,11 @@ int quickSelect(vector<int> vec, int left, int right, int k) {
     return quickSelect(vec, index + 1, q, k - index + p - 1);
     */
    while (left < right) { 
-        int index = partition(&vec[0], left, right); 
+        int index = partition(&vec[0], left, right - 1); 
         if (index == k - 1) {
             return vec[index]; 
         } else if (index > k - 1) {
-            right = index - 1;
+            right = index;
         } else {
             left = index + 1; 
         }
