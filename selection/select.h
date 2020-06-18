@@ -68,6 +68,9 @@ int heapSelect(MinHeap* h1, supportMeanHeap* h2, int k) {
     return last;
 }
 
+//left is a totally useless parameter
+//it's there just to have all same par types foreach select method
+//so we can use the functional invoke 
 int callHeapSelect(vector<int> vec, int left, int right, int k) {
     MinHeap h1 = MinHeap(vec, right - 1);
     supportMeanHeap h2;
