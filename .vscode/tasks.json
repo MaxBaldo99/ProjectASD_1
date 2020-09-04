@@ -11,7 +11,9 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "${fileDirname}/tree.c",
+                "${fileDirname}/tree.h"
             ],
             "options": {
                 "cwd": "/usr/bin"

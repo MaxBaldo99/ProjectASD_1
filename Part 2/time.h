@@ -145,7 +145,7 @@ vector<int> randomize(int nElements) {
     srand(time(NULL));
     vector<int> vec = vector<int>(nElements);
     for (int i = 0; i < nElements; i++) {
-        vec[i] = rand();
+        vec[i] = rand() % nElements;
     }
     return vec;
 }

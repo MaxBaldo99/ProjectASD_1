@@ -6,61 +6,9 @@
 
 #define max(x, y) (((x) > (y)) ? (x) : (y))
 
-struct tree *buildFromPolish(char *inputTree, size_t size) {
-    struct tree *bt = NULL;
-    buildFromPolishWriting(inputTree, size, &bt);
-    return bt;
-}
-
-char *buildFromPolishWriting(char *inputTree, size_t size, struct tree **bt) {
-    char *num[10]; //actual number (or NULL) found
-    char *rest = malloc(size); //the rest of the input to read
-    //copy in num chars rest till find space
-    //substring rest from the first space (cut before)
-    rest = nextWord(inputTree, size, num); 
-    int n = atoi(num); //the number to add as int
-
-    if(*bt == NULL) { //first time create the binary tree
-        if(strcmp(num, "NULL") != 0) {
-            *bt = create(n, NULL);
-            rest = buildFromPolishWriting(rest, size, bt);
-        } else {
-            return NULL; //input is NULL
-        }
-    } else { //add son to the tree
-        bool notNull = strcmp(num, "NULL") != 0;
-        if(notNull) { 
-            //if !NULL add num to bt->left
-            //bt now point to bt->left
-            add(n, true, NULL, *bt);
-            //recursively add to bt->left
-            rest = buildFromPolishWriting(rest, size, &(*bt)->left);
-        }
-        //left side done, now do right
-        rest = nextWord(rest, size, num); 
-        notNull = strcmp(num, "NULL") != 0; 
-        if(notNull) {
-            n = atoi(num);
-            add(n, false, NULL, *bt); 
-            //recursively add to bt->right
-            //bt now point to bt->right
-            rest = buildFromPolishWriting(rest, size, &(*bt)->right);
-        }
-    }
-    return rest;
-}
-
-struct tree *create(int key, char *details) {
+struct tree *create(int key) {
     struct tree *x = malloc(sizeof(struct tree));
-    char *detail = malloc(sizeof(NULL));
     x->details = NULL;
-    if(details != NULL) {
-        detail = realloc(detail, strlen(details) * sizeof(char));
-        strcpy(detail, details);
-        x->details = detail;
-    } else {
-        free(detail);
-    }
     x->key = key;
     x->parent = x->left = x->right = NULL;
     x->height = -1;
@@ -174,7 +122,7 @@ struct tree *BSTinsert(struct tree *root, struct tree *node) {
     return root;
 }
 
-struct tree *BSTfind(int key, const struct tree *root) {
+struct tree *BSTfind(int key, struct tree *root) {
     if(root == NULL || root->key == key) {
         return root;
     } else if(key > root->key) {
@@ -305,18 +253,18 @@ struct tree *leftRotate(struct tree *root, struct tree *node) {
 //assume node has grandfather
 struct tree *doubleRotateLeftRight(struct tree *root, struct tree *node) {
     root = leftRotate(root, node);
-    updateHeight(node->left);
+    AVLupdateHeight(node->left);
     root = rightRotate(root, node);
-    updateHeight(node->right);
+    AVLupdateHeight(node->right);
     return root;
 }
 
 //assume node has grandfather
 struct tree *doubleRotateRightLeft(struct tree *root, struct tree *node) {
     root = rightRotate(root, node);
-    updateHeight(node->right);
+    AVLupdateHeight(node->right);
     root = leftRotate(root, node);
-    updateHeight(node->left);
+    AVLupdateHeight(node->left);
     return root;
 }
 
@@ -346,7 +294,7 @@ struct tree *BSTsuccessor(struct tree *node) {
     }
 }
 
-struct tree *BSTmin(const struct tree *node) {
+struct tree *BSTmin(struct tree *node) {
     if(node == NULL) {
         return NULL;
     } else {
@@ -354,7 +302,7 @@ struct tree *BSTmin(const struct tree *node) {
     }
 }
 
-struct tree *BSTmax(const struct tree *node) {
+struct tree *BSTmax(struct tree *node) {
     if(node == NULL) {
         return NULL;
     } else {
@@ -363,7 +311,7 @@ struct tree *BSTmax(const struct tree *node) {
 }
 
 //error if node == NULL
-struct tree *goDeepOneDirection(const struct tree *node, bool left) {
+struct tree *goDeepOneDirection(struct tree *node, bool left) {
     struct tree *next = left ? node->left : node->right;
     if(next == NULL) {
         return node;
@@ -387,35 +335,35 @@ void destroyTree(struct tree *node) {
 //set node->height to 1 + max of height of his sons
 //then do it to his father
 //go up to the root, stops if node->height doesnt change
-void updateHeight(struct tree *node) {
+void AVLupdateHeight(struct tree *node) {
     if(node != NULL) {
-        changeHeight(node);
-        updateHeight(node->parent);
+        AVLchangeHeight(node);
+        AVLupdateHeight(node->parent);
     }
 }
 
 //set node->height to 1 + max of height of his sons
-void changeHeight(struct tree *node) {
+void AVLchangeHeight(struct tree *node) {
     if(node != NULL) {
         node->height = 1 + max(h(node->left), h(node->right));
     }
 } 
 
-//insert node and eventually balance tree
-struct tree *AVLinsert(struct tree *root, struct tree *node, bool balance) {
+//insert node and balance tree
+struct tree *AVLinsert(struct tree *root, struct tree *node) {
     root = BSTinsert(root, node);
-    updateHeight(node);
+    AVLupdateHeight(node);
     //polishOrder(root);
     //printf("\n");
     //balance only if have dad and grandad, otherwise already balanced
-    if(balance && node->parent != NULL && node->parent->parent != NULL) {
+    if(node->parent != NULL && node->parent->parent != NULL) {
         root = AVLbalanceIfNeeded(root, node->parent->parent);
     }
     return root;
 }
 
-//delete node and eventually balance it
-struct tree *AVLdelete(struct tree *root, struct tree *node, bool balance) {
+//delete node and balance it
+struct tree *AVLdelete(struct tree *root, struct tree *node) {
     struct tree *temp = NULL;
     if(node->left == NULL || node->right == NULL) {
         if(node->left == NULL && node->right == NULL) {
@@ -427,9 +375,9 @@ struct tree *AVLdelete(struct tree *root, struct tree *node, bool balance) {
         temp = BSTmin(node->right)->parent;
     }
     root = BSTdelete(root, node, true);
-    updateHeight(temp);
+    AVLupdateHeight(temp);
 
-    if(balance && temp != NULL) {
+    if(temp != NULL) {
         root = AVLbalanceIfNeeded(root, temp);
     }
     return root;
@@ -474,8 +422,8 @@ struct tree *AVLfixUp(struct tree *root, struct tree *node) {
                     }
                 }
             }
-            updateHeight(son);
-            updateHeight(dad);
+            AVLupdateHeight(son);
+            AVLupdateHeight(dad);
             root = AVLbalanceIfNeeded(root, dad);
         }
     }
@@ -502,7 +450,7 @@ struct tree *RBTinsert(struct tree *root, struct tree *node) {
 
 //assume max(T1) < x->key < min(T2)
 struct tree *RBTjoinPublic(struct tree *T1, struct tree *T2, int key) {
-    struct tree *x = create(key, NULL);
+    struct tree *x = create(key);
     if(RBTblackHeight(T1) <= RBTblackHeight(T2)) {
         return RBTjoinPrivate(T1, T2, x);
     } else {

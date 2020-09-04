@@ -3,15 +3,15 @@
 #include <functional>
 #include <iostream>
 #include "chrono"
-#include "headers/time.h"
-#include "headers/tree.h"
+#include "time.h"
+#include "tree.h"
 
 using namespace chrono;
 
 #define vdd vector<duration<double>>
 
 vdd initialization();
-void execution(vdd tinit, int type, int (*function)(vector<int> vec, int left, int right, int k));
+void execution(vdd tinit, int type, struct tree *(*function)(struct tree *root, struct tree *node));
 void printToFile(vdd texec, vector<double> std, int type);
 string getAlgorithmName(int type);
 void callAlgorithm(int type, vector<int> vec, int left, int right, int k);
@@ -29,6 +29,10 @@ duration<double> res;
 #define RELATIVE_ERROR 0.01
 
 int main() {
+    struct tree *test = NULL;
+    struct tree *node = create(10);
+    test = BSTinsert(test, node);
+    cout << test->key;
     nOfArrays = calcNumOfArrays(startingLength);
     //cin >> vec;
     res = resolution();
@@ -41,9 +45,9 @@ int main() {
     cout << "inizializzo\n";
     vdd tinit = initialization();
     cout << "eseguo\n";
-    //execution(tinit, BST, &BSTinsert);
-    //execution(tinit, RBT, &RBTinsert);
-    //execution(tinit, AVL, &AVLinsert);
+    execution(tinit, BST, &BSTinsert);
+    execution(tinit, RBT, &RBTinsert);
+    execution(tinit, AVL, &AVLinsert);
     
     return 0;
 }
@@ -79,7 +83,7 @@ vdd initialization() {
     return tinit;
 }
 
-void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int)) {
+void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, struct tree *))) {
     /*
         nElements in array:
         100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
@@ -95,16 +99,23 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
     steady_clock::time_point start, end;
     srand(time(NULL));
     for(int i = 0; i < nOfArrays; i++) {
-        //vector to contain the 20 time to calulate std
+        //vector to contain the 20 time to calculate std
         vdd ttoti(nExecSTD);
         for(int h = 0; h < nExecSTD; h++) {
-            int k = type == BST ? nElements / 4 : rand() % nElements + 1;
             start = steady_clock::now();
             vector<int> vec;
             for(int j = 0; j < nTimes; j++) {
                 vec.clear();
                 vec = randomize(nElements);
-                std::__invoke(function, vec, 0, nElements, k);
+                struct tree *tree = NULL;
+                for(int k = 1; i < nElements; i++) {
+                    cout << vec[i] << "\n";
+                    if(BSTfind(vec[i], tree) == NULL) {
+                        struct tree *node = create(vec[i]);
+                        tree = std::__invoke(function, tree, node);
+                    }
+                    preOrder(tree);
+                }
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);

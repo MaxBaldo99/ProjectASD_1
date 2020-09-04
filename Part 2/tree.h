@@ -19,25 +19,23 @@ struct tree
 //generic binary tree
 //return in node is a left or right son
 #define leftSon(x) (x->parent->left == x ? true : false)
-char *buildFromPolishWriting(char *inputTree, size_t size, struct tree **bt);
-struct tree *buildFromPolish(char *inputTree, size_t size);
-struct tree *create(int key, char *details);
+struct tree *create(int key);
 struct tree *add(int key, bool left, char *details, struct tree *parent);
 void preOrder(struct tree *node);
 void inOrder(struct tree *node);
 void postOrder(struct tree *node);
 void destroyTree(struct tree *node);
 void polishOrder(struct tree *node);
-struct tree *goDeepOneDirection(const struct tree *node, bool left);
+struct tree *goDeepOneDirection(struct tree *node, bool left);
 
 //BST Tree
 struct tree *BSTinsert(struct tree *root, struct tree *node);
-struct tree *BSTfind(int key, const struct tree *root);
+struct tree *BSTfind(int key, struct tree *root);
 struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor);
 struct tree *BSTpredecessor(struct tree *node);
 struct tree *BSTsuccessor(struct tree *node);
-struct tree *BSTmin(const struct tree *node);
-struct tree *BSTmax(const struct tree *node);
+struct tree *BSTmin(struct tree *node);
+struct tree *BSTmax(struct tree *node);
 
 //metodi per bilanciamento
 struct tree *rightRotate(struct tree *root, struct tree *node);
@@ -50,8 +48,10 @@ struct tree *doubleRotateRightLeft(struct tree *root, struct tree *node);
 #define h(x) ((x == NULL) ? 0 : x->height)
 //ritorna la altezza nodo->left - altezza nodo right. se nodo è null ritorna 0
 #define hDiff(x) (x == NULL ? 0 : (h(x->left) - h(x->right)))
-struct tree *AVLdelete(struct tree *root, struct tree *node, bool balance);
-struct tree *AVLinsert(struct tree *root, struct tree *node, bool balance);
+void AVLupdateHeight(struct tree *node);
+void AVLchangeHeight(struct tree *node);
+struct tree *AVLdelete(struct tree *root, struct tree *node);
+struct tree *AVLinsert(struct tree *root, struct tree *node);
 struct tree *AVLbalanceIfNeeded(struct tree *root, struct tree *node);
 struct tree *AVLfixUp(struct tree *root, struct tree *node);
 
@@ -70,10 +70,12 @@ struct tree *RBTfixUpOnDelete(struct tree *root, struct tree *node, struct tree 
 struct tree *RBToppositeRedSon(struct tree *node, bool *isOpposite);
 
 //useful
+void print(struct tree *node);
 void printTreeNice(struct tree *root, struct tree *node, int i, int level, int printed, bool left);
 struct tree *nextNode(struct tree *node, bool left);
 struct tree *brother(struct tree *node);
 struct tree *uncle(struct tree *node, bool *isOpposite);
 int height(const struct tree *node);
+int power(int base, int exp);
 
 #endif

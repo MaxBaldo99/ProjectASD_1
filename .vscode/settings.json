@@ -44,6 +44,7 @@
         "typeinfo": "cpp",
         "utility": "cpp",
         "minheap.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "tree.h" : "c"
     }
 }
