@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-#include "useful.h"
 
 struct tree
 {
@@ -65,10 +64,9 @@ int height(const struct tree *node);
 
 //RB Tree
 //color to string
-#define color(x) (x == 0 ? "red" : x == 1 ? "black" : x == 2 ? "doubleBlack" : x == -1 ? "" : "colorError")
+#define color(x) (x == 0 ? "red" : x == 1 ? "black" : "colorError")
 #define red 0
 #define black 1
-#define doubleBlack 2
 struct tree *RBTInsert(struct tree *root, struct tree *node);
 struct tree *RBTJoinPublic(struct tree *T1, struct tree *T2, int key);
 struct tree *RBTJoinPrivate(struct tree *T1, struct tree *T2, struct tree *x);
