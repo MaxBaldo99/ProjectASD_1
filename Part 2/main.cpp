@@ -29,10 +29,6 @@ duration<double> res;
 #define RELATIVE_ERROR 0.01
 
 int main() {
-    struct tree *test = NULL;
-    struct tree *node = create(10);
-    test = BSTinsert(test, node);
-    cout << test->key;
     nOfArrays = calcNumOfArrays(startingLength);
     //cin >> vec;
     res = resolution();

@@ -7,7 +7,7 @@
 #define max(x, y) (((x) > (y)) ? (x) : (y))
 
 struct tree *create(int key) {
-    struct tree *x = malloc(sizeof(struct tree));
+    struct tree *x = (struct tree *) malloc(sizeof(struct tree));
     x->details = NULL;
     x->key = key;
     x->parent = x->left = x->right = NULL;
@@ -17,7 +17,7 @@ struct tree *create(int key) {
 }
 
 struct tree *add(int key, bool left, char *details, struct tree *parent) {
-    struct tree *x = malloc(sizeof(struct tree));
+    struct tree *x = (struct tree *) malloc(sizeof(struct tree));
     x->key = key;
     x->left = x->right = NULL;
     x->details = NULL;
@@ -93,9 +93,9 @@ void print(struct tree *node) {
 
 struct tree *BSTinsert(struct tree *root, struct tree *node) {
     struct tree *y = NULL;
-    y = malloc(sizeof(struct tree));
+    y = (struct tree *) malloc(sizeof(struct tree));
     struct tree *x = NULL;
-    x = malloc(sizeof(struct tree));
+    x = (struct tree *) malloc(sizeof(struct tree));
 
     y = NULL;
     x = root;
@@ -141,7 +141,7 @@ struct tree *BSTfind(int key, struct tree *root) {
             e poi potrò cancellare node
 */
 struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor) {
-    struct tree *deleteNode = malloc(sizeof(struct tree));
+    struct tree *deleteNode = (struct tree *) malloc(sizeof(struct tree));
     if(node->left == NULL || node->right == NULL) {
         //se almeno uno dei figli di node è NULL
         deleteNode = node; 
@@ -272,7 +272,7 @@ struct tree *BSTpredecessor(struct tree *node) {
     if(node->left != NULL) {
         return BSTmax(node->left);
     } else {
-        struct tree *y = malloc(sizeof(struct tree));
+        struct tree *y = (struct tree *) malloc(sizeof(struct tree));
         while(y != NULL && node != y->right) {
             node = y;
             y = node->parent;
@@ -285,7 +285,7 @@ struct tree *BSTsuccessor(struct tree *node) {
     if(node->right != NULL) {
         return BSTmin(node->right);
     } else {
-        struct tree *y = malloc(sizeof(struct tree));
+        struct tree *y = (struct tree *) malloc(sizeof(struct tree));
         while(y != NULL && node != y->left) {
             node = y;
             y = node->parent;
