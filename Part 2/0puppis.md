@@ -1,0 +1,15 @@
+Buongiorno,
+
+vi comunico che ho finalmente avuto il tempo di correggere la vostra relazione. In linea di massimo, il codice e il modo in cui misurate i tempi sono corretti. Avete pero' fatto un (bel) po' di confusione sulla limitazione dell'errore relativo. Avevo spiegato piu' volte a lezione (e sembra che nella prima parte della lezione riportiate correttamente quello che avevo spiegato) che uno dei problemi principali era limitare l'errore relativo verso l'alto, ovvero garantire che fosse sempre minore o uguale a 0.001 (0.1%). Per far cio' occorre garantire che i tempi misurati siano superiori a una certa quantita', calcolata in funzione della risoluzione del clock monotono. Effettivamente e' quello che fate nel codice sorgente (anche se il calcolo del numero di iterazioni poteva essere migliorato, come spiegato a lezione con pseudocodice). Poi nella parte finale della relazione, pero', avete una sezione in cui affermate:
+
+> L’errore relativo abbiamo già visto come lo rispettiamo. Nel grafico di sinistra, che è uno zoom per n ≤ 1000, si vede come che l’​ errore ​ è ​ sempre maggiore del ​ minimo necessario​. Il grafico di destra ricalca il grafico sui tempi di esecuzione: ovvio è che maggiore è il tempo esecuzione maggiore è la differenza tra errore minimo da garantire e l’errore effettivo. Ecco perché anche nel grafico degli errori HS cresce più di MOMS che cresce più di QS.
+
+Queste affermazioni non hanno molto senso dal mio punto di vista (l'errore della misurazione non si potrebbe nemmeno stimare in linea teorica)... a meno che' qui non stiate parlando dello scarto quadratico medio, o della deviazione standard (e il fatto che questi crescano con N non e' nemmeno cosi' ovvio...). 
+
+Altra cosa, su cui ho insistito parecchio a lezione, sono i grafici in scala (doppiamente) logaritmica: lo scopo di questi grafici, che applicano il logaritmo sia sull'ascissa che sull'ordinata, e' rappresentare tutte le funzioni polinomiali con rette. Funzioni polinomiali di gradi diversi saranno quindi rappresentati da rette con cefficienti angolari diversi. Funzioni linear saranno rappresentati da rette con lo stesso coefficiente angolare, ma traslate una rispetto all'altra. Questo tipo di grafici permette di distinguere chiaramente i comportamenti asintotici di funzioni lineari, quadratiche, esponenziali etc, e allo stesso tempo da' la possibilita' di osservare il comportamento delle funzioni per valori di N molto grandi ma anche molto piccoli. I grafici da voi riportati sono invece in scala semi-logaritmica (ovvero il logaritmo e' applicato solo sull'ordinata). Quest'ultimo tipo di grafici non serve a molto...
+
+Come voto assegnerei 27/30. Se pero' nella seconda parte del progetto risolverete i problemi riscontrati qui sopra immagino che possiamo raggiungere facilmente il 30/30 (ovvero: terrei il massimo tra i due voti).
+
+Cordiali saluti,
+
+Gabriele Puppis
