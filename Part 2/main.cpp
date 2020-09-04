@@ -2,8 +2,9 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
-#include "headers/time.h"
 #include "chrono"
+#include "headers/time.h"
+#include "headers/tree.h"
 
 using namespace chrono;
 
@@ -28,15 +29,6 @@ duration<double> res;
 #define RELATIVE_ERROR 0.01
 
 int main() {
-    int i = 0;
-    int n = startingLength;
-    while(n > 0) {
-        cout << "i: " << i << ", n: " << n << "\n";
-        n = updateNumOfElem(i, n);
-        i++;
-    }
-    
-    /*
     nOfArrays = calcNumOfArrays(startingLength);
     //cin >> vec;
     res = resolution();
@@ -49,10 +41,10 @@ int main() {
     cout << "inizializzo\n";
     vdd tinit = initialization();
     cout << "eseguo\n";
-    execution(tinit, BST, &addToBST);
-    execution(tinit, RBT, &addToRBT);
-    execution(tinit, AVL, &addToAVL);
-    */
+    //execution(tinit, BST, &BSTinsert);
+    //execution(tinit, RBT, &RBTinsert);
+    //execution(tinit, AVL, &AVLinsert);
+    
     return 0;
 }
 

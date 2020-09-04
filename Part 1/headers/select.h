@@ -1,4 +1,4 @@
-#include "headers/minheap.h"
+#include "minheap.h"
 #include <assert.h>
 
 #define BLOCK_SIZE 5

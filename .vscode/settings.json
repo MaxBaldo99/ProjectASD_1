@@ -35,13 +35,15 @@
         "system_error": "cpp",
         "tuple": "cpp",
         "type_traits": "cpp",
-        "utility": "cpp",
         "initializer_list": "cpp",
         "istream": "cpp",
         "new": "cpp",
         "sstream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "utility": "cpp",
+        "minheap.h": "c",
+        "time.h": "c"
     }
 }

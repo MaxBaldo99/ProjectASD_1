@@ -402,20 +402,20 @@ void changeHeight(struct tree *node) {
 } 
 
 //insert node and eventually balance tree
-struct tree *AVLInsert(struct tree *root, struct tree *node, bool balance) {
+struct tree *AVLinsert(struct tree *root, struct tree *node, bool balance) {
     root = BSTinsert(root, node);
     updateHeight(node);
     //polishOrder(root);
     //printf("\n");
     //balance only if have dad and grandad, otherwise already balanced
     if(balance && node->parent != NULL && node->parent->parent != NULL) {
-        root = AVLBalanceIfNeeded(root, node->parent->parent);
+        root = AVLbalanceIfNeeded(root, node->parent->parent);
     }
     return root;
 }
 
 //delete node and eventually balance it
-struct tree *AVLDelete(struct tree *root, struct tree *node, bool balance) {
+struct tree *AVLdelete(struct tree *root, struct tree *node, bool balance) {
     struct tree *temp = NULL;
     if(node->left == NULL || node->right == NULL) {
         if(node->left == NULL && node->right == NULL) {
@@ -430,27 +430,27 @@ struct tree *AVLDelete(struct tree *root, struct tree *node, bool balance) {
     updateHeight(temp);
 
     if(balance && temp != NULL) {
-        root = AVLBalanceIfNeeded(root, temp);
+        root = AVLbalanceIfNeeded(root, temp);
     }
     return root;
 }
 
-struct tree *AVLBalanceIfNeeded(struct tree *root, struct tree *node) {
+struct tree *AVLbalanceIfNeeded(struct tree *root, struct tree *node) {
     if(node != NULL) {
         int dif = hDiff(node);
         if(dif < -1) {
-            root = AVLFixUp(root, node->right);
+            root = AVLfixUp(root, node->right);
         } else if(dif > 1) {
-            root = AVLFixUp(root, node->left);
+            root = AVLfixUp(root, node->left);
         } else {
-            root = AVLBalanceIfNeeded(root, node->parent);
+            root = AVLbalanceIfNeeded(root, node->parent);
         }
     }        
     return root;
 }
 
 //balance tree
-struct tree *AVLFixUp(struct tree *root, struct tree *node) {
+struct tree *AVLfixUp(struct tree *root, struct tree *node) {
     if(node != NULL) {
         struct tree *dad = node->parent;
         if(dad != NULL) {
@@ -476,7 +476,7 @@ struct tree *AVLFixUp(struct tree *root, struct tree *node) {
             }
             updateHeight(son);
             updateHeight(dad);
-            root = AVLBalanceIfNeeded(root, dad);
+            root = AVLbalanceIfNeeded(root, dad);
         }
     }
     return root;
@@ -488,33 +488,33 @@ struct tree *AVLFixUp(struct tree *root, struct tree *node) {
 #pragma region RBT
 
 //insert node and eventually balance tree
-struct tree *RBTInsert(struct tree *root, struct tree *node) {
+struct tree *RBTinsert(struct tree *root, struct tree *node) {
     root = BSTinsert(root, node);
     node->color = node == root ? black : red;
     //polishOrder(root);
     //printf("\n");
     //balance only if have dad and grandad, otherwise already balanced
     if(node->parent != NULL && node->parent->parent != NULL && node->parent->color == red) {
-        root = RBTFixUpOnInsert(root, node);
+        root = RBTfixUpOnInsert(root, node);
     }
     return root;
 }
 
 //assume max(T1) < x->key < min(T2)
-struct tree *RBTJoinPublic(struct tree *T1, struct tree *T2, int key) {
+struct tree *RBTjoinPublic(struct tree *T1, struct tree *T2, int key) {
     struct tree *x = create(key, NULL);
-    if(blackHeight(T1) <= blackHeight(T2)) {
-        return RBTJoinPrivate(T1, T2, x);
+    if(RBTblackHeight(T1) <= RBTblackHeight(T2)) {
+        return RBTjoinPrivate(T1, T2, x);
     } else {
-        return RBTJoinPrivate(T2, T1, x);
+        return RBTjoinPrivate(T2, T1, x);
     }
 }
 
 //assume blackHeight(T1) <= blackHeight(T2
 //assume max(T1) < x->key < min(T2) || max(T2) < x->key < min(T1)
-struct tree *RBTJoinPrivate(struct tree *T1, struct tree *T2, struct tree *x) {
+struct tree *RBTjoinPrivate(struct tree *T1, struct tree *T2, struct tree *x) {
     struct tree *node = T2;
-    while(blackHeight(T1) < blackHeight(node) || node->color == 0) {
+    while(RBTblackHeight(T1) < RBTblackHeight(node) || node->color == 0) {
         //se chiavi t1 sono minori t2 ==> scendo sempre a sx
         //se chiavi t1 sono maggiori t1 ==> scendo sempre a dx
         node = T1->key < T2->key ? node->left : node->right;
@@ -535,19 +535,19 @@ struct tree *RBTJoinPrivate(struct tree *T1, struct tree *T2, struct tree *x) {
     }
     T1->parent = x;
     y->parent = x;
-    T2 = RBTFixUpOnInsert(T2, x);
+    T2 = RBTfixUpOnInsert(T2, x);
     return T2;
 }
 
-int blackHeight(struct tree *node) {
+int RBTblackHeight(struct tree *node) {
     if(node == NULL) return 0;
     else {
         int bh = node->left->color == black ? 1 : 0;
-        return bh + blackHeight(node->left);
+        return bh + RBTblackHeight(node->left);
     }
 }
 
-struct tree *RBTFixUpOnInsert(struct tree *root, struct tree *node) {
+struct tree *RBTfixUpOnInsert(struct tree *root, struct tree *node) {
     if(node != NULL && node->parent != NULL && node->parent->color == red) {
         bool leftSon = leftSon(node);
         bool uncleIsOpp = true;
@@ -561,11 +561,11 @@ struct tree *RBTFixUpOnInsert(struct tree *root, struct tree *node) {
             //caso quasi fortunato: zio black non opposto a x
             struct tree *dad = node->parent;
             root = leftSon ? rightRotate(root, node) : leftRotate(root, node);
-            root = RBTFixUpOnInsert(root, dad);
+            root = RBTfixUpOnInsert(root, dad);
         } else { //(uncl->color == red)
             node->parent->color = uncl->color = black;
             node->parent->parent->color = red;
-            root = RBTFixUpOnInsert(root, node->parent->parent);
+            root = RBTfixUpOnInsert(root, node->parent->parent);
         }
     } else if(node != NULL && root == node) {
         node->color = black; //convenzione
@@ -586,7 +586,7 @@ struct tree *uncle(struct tree *node, bool *isOpposite) {
     return NULL;
 }
 
-struct tree *RBTDelete(struct tree *root, struct tree *node) {
+struct tree *RBTdelete(struct tree *root, struct tree *node) {
     struct tree *temp = NULL;
     struct tree *tempSon = NULL;
     struct tree *tempDad = NULL;
@@ -605,16 +605,16 @@ struct tree *RBTDelete(struct tree *root, struct tree *node) {
     }
     root = BSTdelete(root, node, false);
     if(fixUp) {
-        root = RBTFixUpOnDelete(root, tempSon, tempDad, tempLeft);
+        root = RBTfixUpOnDelete(root, tempSon, tempDad, tempLeft);
     }
     return root;
 }
 
-struct tree *RBTFixUpOnDelete(struct tree *root, struct tree *node, struct tree *dad, bool nodeLeft) { 
+struct tree *RBTfixUpOnDelete(struct tree *root, struct tree *node, struct tree *dad, bool nodeLeft) { 
     struct tree *brother = nodeLeft ? dad->right : dad->left;
     if((node == NULL || node->color == black) && brother != NULL) {
         bool isOpposite = false;
-        struct tree *nephew = oppositeRedSon(brother, &isOpposite);
+        struct tree *nephew = RBToppositeRedSon(brother, &isOpposite);
         if(nephew != NULL && nephew->color == red && isOpposite) {
             //caso fortunato: node ha nipote red e opposto
             nephew->color = black;
@@ -632,13 +632,13 @@ struct tree *RBTFixUpOnDelete(struct tree *root, struct tree *node, struct tree 
                 dad->color = black;
                 brother->color = red;
             } else {
-                root = RBTFixUpOnDelete(root, dad, dad->parent, leftSon(dad));
+                root = RBTfixUpOnDelete(root, dad, dad->parent, leftSon(dad));
             }
         } else if(brother->color == red && (nephew == NULL || nephew->color == black)) {
             brother->color = black;
             dad->color = red;
             root = nodeLeft ? leftRotate(root, brother) : rightRotate(root, brother);
-            root = RBTFixUpOnDelete(root, node, dad, nodeLeft);
+            root = RBTfixUpOnDelete(root, node, dad, nodeLeft);
         } else {
             printf("WTF DUDE\n");
         }
@@ -652,7 +652,7 @@ struct tree *RBTFixUpOnDelete(struct tree *root, struct tree *node, struct tree 
 //se esiste, ritorna l'altro nipote rosso
 //se esiste, ritorna un nipote nero
 //else, NULL se non ha nipoti
-struct tree *oppositeRedSon(struct tree *node, bool *isOpposite) {
+struct tree *RBToppositeRedSon(struct tree *node, bool *isOpposite) {
     if(node != NULL) {
         if(*isOpposite = (!leftSon(node) && node->right != NULL && node->right->color == red)) {
             return node->right;
