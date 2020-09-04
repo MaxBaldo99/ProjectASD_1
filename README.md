@@ -18,7 +18,7 @@ Implement and compare these three algorithms:
     - [x] save and store all data about execution time spent and its standard deviation
     - [x] plot data found
     - [x] compare sperimental and asyntotic data
-- [ ] Write the final relation with graphs of data found
+- [x] Write the final relation with graphs of data found
 
 [Link for relation](https://drive.google.com/open?id=1RBXC6th5qzl4aEK_ah5653H4VoKP_PkQs3e1rcd3mQo)
 
@@ -33,14 +33,17 @@ Implement and compare these three tyes of BST:
 
 Same as on top, but execution has the scheme:
 - [ ] generate empty BST
-- [ ] generate randomly n numbers [n1, ..., nn]
-- [ ] find ni in BST, if not found then insert it in BST  
+- [ ] repeat as follow for n = 1k to n = 1mln:
+  - [ ] generate randomly n numbers 
+  - [ ] foreach number find it in BST, if not found then insert it in BST
+- [ ] store all execution time data
+- [ ] analyze data with log scaled graphs on both axis
 
 At the end of computation will be done:
 * number of finds: n
 * number of insert: m
 * m <= n
 * m == n if all generated numbers are different each other (no repetitions)
-* so m tends to n if gets harder to generate same 2 times, which means:
+* so m tends to n if gets harder to generate same number 2 times, which means:
   * random numbers possible range increases
   * array size decreases
