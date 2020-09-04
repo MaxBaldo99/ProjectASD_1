@@ -21,7 +21,7 @@ duration<double> initializeTime(int nElements, int repetitions);
 duration<double> resolution();
 vector<int> randomize(int nElements);
 
-int updateNumOfElem(int n);
+int updateNumOfElem(int i, int n);
 int updateNumOfTimes(int n);
 int calcNumOfArrays(int startingLength);
 
@@ -153,11 +153,13 @@ vector<int> randomize(int nElements) {
 int updateNumOfElem (int i, int n) {
     
     int k = i/9;
+    k = pow(10, k);
     int increase = 100 * k;
+    n += increase;
     if(n > 5 * pow(10, 6)) {
         return -1;
     } else {
-        return n += increase;
+        return n;
     }
 }
 
@@ -169,7 +171,7 @@ int calcNumOfArrays(int startingLength) {
     int i = 0;
     int length = startingLength;
     while(length != -1) {
-        length = updateNumOfElem(length);
+        length = updateNumOfElem(i, length);
         i++;
     }
     return i;

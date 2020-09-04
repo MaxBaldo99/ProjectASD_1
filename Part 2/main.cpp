@@ -4,7 +4,6 @@
 #include <iostream>
 #include "headers/time.h"
 #include "chrono"
-#include "headers/select.h"
 
 using namespace chrono;
 
@@ -29,6 +28,15 @@ duration<double> res;
 #define RELATIVE_ERROR 0.01
 
 int main() {
+    int i = 0;
+    int n = startingLength;
+    while(n > 0) {
+        cout << "i: " << i << ", n: " << n << "\n";
+        n = updateNumOfElem(i, n);
+        i++;
+    }
+    
+    /*
     nOfArrays = calcNumOfArrays(startingLength);
     //cin >> vec;
     res = resolution();
@@ -44,6 +52,7 @@ int main() {
     execution(tinit, BST, &addToBST);
     execution(tinit, RBT, &addToRBT);
     execution(tinit, AVL, &addToAVL);
+    */
     return 0;
 }
 
@@ -72,7 +81,7 @@ vdd initialization() {
         myfile << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
 
         nTimes = updateNumOfTimes(nTimes);
-        nElements = updateNumOfElem(nElements);
+        nElements = updateNumOfElem(i, nElements);
     }
     myfile.close();
     return tinit;
@@ -133,20 +142,10 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
             cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\n";
 
             nTimes = updateNumOfTimes(nTimes);
-            nElements = updateNumOfElem(nElements);
+            nElements = updateNumOfElem(i, nElements);
         }
     }
     printToFile(texec, std, type);
-}
-
-void callAlgorithm(int type, vector<int> vec, int left, int right, int k) {
-    if(type == BST) {
-        callHeapSelect(vec, left, right, k);
-    } else if(type == QUICK) {
-        quickSelect(vec, left, right, k);
-    } else if(type == MOM) {
-        MOMSelect(vec, left, right, k);
-    }
 }
 
 void printToFile(vdd texec, vector<double> std, int type) {
@@ -158,7 +157,7 @@ void printToFile(vdd texec, vector<double> std, int type) {
         int nTimes = startingNumTimes;
         for(int i = 0; i < texec.size(); i++) {
             myfile << nElements << "\t" << texec[i].count() << "\t" << std[i] << "\t" << nTimes << "\n";
-            nElements = updateNumOfElem(nElements);
+            nElements = updateNumOfElem(i, nElements);
             nTimes = updateNumOfTimes(nTimes);
         }
     }
@@ -167,11 +166,11 @@ void printToFile(vdd texec, vector<double> std, int type) {
 
 string getAlgorithmName(int type) {
     if(type == BST) {
-        return "heap";
-    } else if(type == QUICK) {
-        return "quick";
-    } else if(type == MOM) {
-        return "mom";
+        return "BST";
+    } else if(type == AVL) {
+        return "AVL";
+    } else if(type == RBT) {
+        return "RBT";
     }
     return NULL;
 }
