@@ -103,14 +103,14 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, str
             for(int j = 0; j < nTimes; j++) {
                 vec.clear();
                 vec = randomize(nElements);
+
+                //algoritmo ricerca e inserimento
                 struct tree *tree = NULL;
-                for(int k = 1; i < nElements; i++) {
-                    cout << vec[i] << "\n";
-                    if(BSTfind(vec[i], tree) == NULL) {
-                        struct tree *node = create(vec[i]);
+                for(int k = 0; k < nElements; k++) {
+                    if(BSTfind(vec[k], tree) == NULL) {
+                        struct tree *node = create(vec[k]);
                         tree = std::__invoke(function, tree, node);
                     }
-                    preOrder(tree);
                 }
             }
             end = steady_clock::now();
