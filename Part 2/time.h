@@ -10,6 +10,7 @@
 using namespace std;
 using namespace chrono;
 
+double mean (vector<double> vec);
 //media
 double mean (vector<duration<double>> vec);
 //scarto quadratico medio
@@ -87,8 +88,16 @@ duration<double> resolution () {
     return resolution;
 }
 
+double mean (vector<double> vec) {
+    double sum = 0;
+    for (int i = 0; i < vec.size(); i++) {
+        sum += vec[i];
+    }
+    return sum / vec.size();
+}
+
 double mean (vector<duration<double>> vec) {
-    duration<double> sum;
+    duration<double> sum = (duration<double>)0;
     for (auto i : vec) {
         sum += i;
     }
@@ -145,7 +154,7 @@ vector<int> randomize(int nElements) {
     srand(time(NULL));
     vector<int> vec = vector<int>(nElements);
     for (int i = 0; i < nElements; i++) {
-        vec[i] = rand() % nElements;
+        vec[i] = rand();
     }
     return vec;
 }

@@ -95,7 +95,7 @@ duration<double> resolution () {
 }
 
 double mean (vector<duration<double>> vec) {
-    duration<double> sum;
+    duration<double> sum = (duration<double>)0;
     for (auto i : vec) {
         sum += i;
     }
