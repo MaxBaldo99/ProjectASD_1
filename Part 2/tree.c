@@ -322,8 +322,13 @@ struct tree *goDeepOneDirection(struct tree *node, bool left) {
 
 void destroyTree(struct tree *node) {
     if(node != NULL) {
-        destroyTree(node->left);
-        destroyTree(node->right);
+        //if not necessary, useful to reduce stack calls
+        if(node->left != NULL) { 
+            destroyTree(node->left);
+        }
+        if(node->right != NULL) {
+            destroyTree(node->right);
+        }
         free(node->details);
         free(node);
     }

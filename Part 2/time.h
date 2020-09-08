@@ -7,6 +7,8 @@
 #include <vector>
 #include <cstdlib>
 #include <fstream>
+#include "tree.h"
+
 using namespace std;
 using namespace chrono;
 
@@ -138,25 +140,20 @@ vector<duration<double>> resolutionVec(int n) {
 duration<double> initializeTime(int nElements, int repetitions) {
     steady_clock::time_point start, end;
     start = steady_clock::now();
-    vector<int> vec;
     for (int i = 0; i < repetitions; i++) {
-        vec = randomize(nElements);
-        /*for(int j = 0; j < nElements; j++) {
-            cout << j << "\t" << vec[j] << "\n";
-        }*/
+        srand(time(NULL));
+        struct tree *root = NULL;
+        for(int j = 0; j < nElements; j++) {
+            struct tree *node = NULL;
+            int k = rand();
+            node = create(k);
+            node->left = root;
+            root = node;
+        }
+        //destroyTree(root);
     }
     end = steady_clock::now();
-    //delete vec;
     return (duration<double>)((end - start) / repetitions);
-}
-
-vector<int> randomize(int nElements) {
-    srand(time(NULL));
-    vector<int> vec = vector<int>(nElements);
-    for (int i = 0; i < nElements; i++) {
-        vec[i] = rand();
-    }
-    return vec;
 }
 
 int updateNumOfElem (int i, int n) {
@@ -165,7 +162,7 @@ int updateNumOfElem (int i, int n) {
     k = pow(10, k);
     int increase = 100 * k;
     n += increase;
-    if(n > 5 * pow(10, 6)) {
+    if(n > pow(10, 6)) {
         return -1;
     } else {
         return n;

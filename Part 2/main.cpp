@@ -76,23 +76,16 @@ vdd initialization() {
 }
 
 void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, struct tree *))) {
-    /*
-        nElements in array:
-        100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
-        1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
-        10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
-    */
     int nElements = startingLength;
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd texec(nOfArrays);
     vector<double> std(nOfArrays);
-    vector<double> meanOfNumMake(nOfArrays);
+    vector<double> meanOfNumOfMake(nOfArrays);
     cout << getAlgorithmName(type) << endl;
     cout << "i  n° elem\texec time\tn° rip\tstandard dev\tstd/mean\tn-m mean\tm/n\n";
     steady_clock::time_point start, end;
     for(int i = 0; i < nOfArrays; i++) {
-        //vector to contain the 20 time to calculate std
-        vdd ttoti(nExecSTD);
+        vdd ttoti(nExecSTD); //vector contains 20 times estimated to calculate std
         for(int h = 0; h < nExecSTD; h++) {
             vector<double> nOfMake(nTimes);
             start = steady_clock::now();
@@ -109,11 +102,11 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, str
                     }
                 }
                 //bool ok = isBST(tree);
-                destroyTree(tree);
+                //destroyTree(tree);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
-            meanOfNumMake[i] = mean(nOfMake);
+            meanOfNumOfMake[i] = mean(nOfMake);
         }
         for(int j = 0; j < nExecSTD; j++) {
             //ttoti becomes texeci: substracted init time
@@ -137,8 +130,8 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, str
             if(nElements < 1000) {
                 cout << 0;
             }
-            double percNumOfMake = meanOfNumMake[i] / nElements;
-            cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\t" << nElements - meanOfNumMake[i] << "\t" << percNumOfMake << "\n";
+            double percNumOfMake = meanOfNumOfMake[i] / nElements;
+            cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\t" << nElements - meanOfNumOfMake[i] << "\t" << percNumOfMake << "\n";
 
             nTimes = updateNumOfTimes(nTimes);
             nElements = updateNumOfElem(i, nElements);
