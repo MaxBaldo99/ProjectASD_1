@@ -696,3 +696,24 @@ int power(int base, int exp) {
 struct tree *nextNode(struct tree *node, bool left) {
     return node == NULL ? NULL : left ? node->left : node->right;
 }
+
+bool isBST(struct tree *bt) {
+    bool bst = true;
+    bst = isBSTPrivate(bt, -__INT32_MAX__, __INT32_MAX__);
+    return bst;
+}
+
+bool isBSTPrivate(struct tree *bt, int l, int r) {
+
+    bool bst = true;
+    if(bt != NULL) {
+        bst = (bt->key > l && bt->key < r);
+        if(bst) {
+            bst = isBSTPrivate(bt->left, l, bt->key);
+        }
+        if(bst) {
+            bst = isBSTPrivate(bt->right, bt->key, r);
+        }
+    } 
+    return bst;
+}

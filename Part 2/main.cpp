@@ -14,7 +14,6 @@ vdd initialization();
 void execution(vdd tinit, int type, struct tree *(*function)(struct tree *root, struct tree *node));
 void printToFile(vdd texec, vector<double> std, int type);
 string getAlgorithmName(int type);
-void callAlgorithm(int type, vector<int> vec, int left, int right, int k);
 
 #define startingLength 100
 #define startingNumTimes 150
@@ -91,17 +90,17 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, str
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd texec(nOfArrays);
     vector<double> std(nOfArrays);
-    vector<double> nOfNonInsert(nOfArrays);
+    vector<double> meanOfNumMake(nOfArrays);
     cout << getAlgorithmName(type) << endl;
-    cout << "i  n° elem\ttot time\tn° rip\tstandard dev\tstd/mean\tnumOfNonInsert\n";
+    cout << "i  n° elem\texec time\tn° rip\tstandard dev\tstd/mean\tn-m mean\tm/n\n";
     steady_clock::time_point start, end;
-    srand(time(NULL));
     for(int i = 0; i < nOfArrays; i++) {
         //vector to contain the 20 time to calculate std
         vdd ttoti(nExecSTD);
         for(int h = 0; h < nExecSTD; h++) {
-            vector<double> nOfNonInsertion(nTimes);
+            vector<double> nOfMake(nTimes);
             start = steady_clock::now();
+            srand(time(NULL));
             for(int j = 0; j < nTimes; j++) {
                 //algoritmo ricerca e inserimento
                 struct tree *tree = NULL;
@@ -110,14 +109,15 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, str
                     if(BSTfind(random, tree) == NULL) {
                         struct tree *node = create(random);
                         tree = std::__invoke(function, tree, node);
-                    } else {
-                        nOfNonInsertion[j]++;
+                        nOfMake[j]++;
                     }
                 }
+                //bool ok = isBST(tree);
+                destroyTree(tree);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
-            nOfNonInsert[i] = mean(nOfNonInsertion);
+            meanOfNumMake[i] = mean(nOfMake);
         }
         for(int j = 0; j < nExecSTD; j++) {
             //ttoti becomes texeci: substracted init time
@@ -141,7 +141,8 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, str
             if(nElements < 1000) {
                 cout << 0;
             }
-            cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\t" << nOfNonInsert[i] << "\n";
+            double percNumOfMake = meanOfNumMake[i] / nElements;
+            cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\t" << nElements - meanOfNumMake[i] << "\t" << percNumOfMake << "\n";
 
             nTimes = updateNumOfTimes(nTimes);
             nElements = updateNumOfElem(i, nElements);

@@ -77,5 +77,7 @@ struct tree *brother(struct tree *node);
 struct tree *uncle(struct tree *node, bool *isOpposite);
 int height(const struct tree *node);
 int power(int base, int exp);
+bool isBST(struct tree *bt);
+bool isBSTPrivate(struct tree *bt, int l, int r);
 
 #endif
