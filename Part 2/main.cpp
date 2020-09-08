@@ -27,12 +27,14 @@ int nOfArrays;
 duration<double> res;
 #define RELATIVE_ERROR 0.01
 
+string PATH = "Part 2/times/";
+
 int main() {
     nOfArrays = calcNumOfArrays(startingLength);
     //cin >> vec;
     res = resolution();
     cout << "resolution: " << res.count() << "\n";
-    ofstream myfile ("times/resolution.txt");
+    ofstream myfile(PATH + "resolution.txt");
     if (myfile.is_open()) {
         myfile << "resolution:\n" << res.count();
     }
@@ -49,18 +51,12 @@ int main() {
 
 //TODO
 vdd initialization() {
-    /*
-        nElements in array:
-        100, 200, 300, ... , 1.000 (+ 100 each time) (10 array dimensions)
-        1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
-        10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
-    */
     int nElements = startingLength;
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd tinit = vdd(nOfArrays);
 
     //output to file
-    ofstream myfile ("times/init.txt");
+    ofstream myfile (PATH + "init.txt");
     if (myfile.is_open())
     {
         myfile << "n° elem\tinit time\tn° rip\n";
@@ -153,7 +149,7 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, str
 
 void printToFile(vdd texec, vector<double> std, int type) {
 
-    ofstream myfile ("times/" + getAlgorithmName(type) + " exec.txt");
+    ofstream myfile (PATH + getAlgorithmName(type) + " exec.txt");
     if (myfile.is_open()) {
         myfile << "n° elem\texec time\tstd\tn° rip\n";
         int nElements = startingLength;
