@@ -3,8 +3,9 @@
 #include <functional>
 #include <iostream>
 #include "chrono"
-#include "time.h"
-#include "tree.h"
+#include "headers/time.h"
+#include "headers/tree.h"
+#include "headers/tree.c"
 
 using namespace chrono;
 
@@ -104,7 +105,7 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, str
                     }
                 }
                 //bool ok = isBST(tree);
-                //destroyTree(tree);
+                destroyTree(tree);
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
