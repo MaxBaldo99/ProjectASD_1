@@ -126,9 +126,9 @@ struct tree *BSTfind(int key, struct tree *root) {
     if(root == NULL || root->key == key) {
         return root;
     } else if(key > root->key) {
-        BSTfind(key, root->right);
+        return BSTfind(key, root->right);
     } else {
-        BSTfind(key, root->left);
+        return BSTfind(key, root->left);
     }
 }
 
@@ -320,7 +320,7 @@ struct tree *goDeepOneDirection(struct tree *node, bool left) {
     }
 }
 
-void destroyTree(struct tree *node) {
+void destroyTree(struct tree *&node) {
     if(node != NULL) {
         //if not necessary, useful to reduce stack calls
         if(node->left != NULL) { 
@@ -330,7 +330,7 @@ void destroyTree(struct tree *node) {
             destroyTree(node->right);
         }
         //free(node->details);
-        free(node);
+        delete node;
     }
 }
 

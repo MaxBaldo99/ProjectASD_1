@@ -24,7 +24,7 @@ struct tree *add(int key, bool left, char *details, struct tree *parent);
 void preOrder(struct tree *node);
 void inOrder(struct tree *node);
 void postOrder(struct tree *node);
-void destroyTree(struct tree *node);
+void destroyTree(struct tree *&node);
 void polishOrder(struct tree *node);
 struct tree *goDeepOneDirection(struct tree *node, bool left);
 
