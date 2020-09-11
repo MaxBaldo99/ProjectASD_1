@@ -29,7 +29,7 @@ void polishOrder(struct tree *node);
 struct tree *goDeepOneDirection(struct tree *node, bool left);
 
 //BST Tree
-struct tree *BSTinsert(struct tree *&root, struct tree *node);
+struct tree *BSTinsert(struct tree *& root, struct tree *node);
 struct tree *BSTfind(struct tree *root, int key);
 struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor);
 struct tree *BSTpredecessor(struct tree *node);

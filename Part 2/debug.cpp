@@ -10,12 +10,12 @@
 
 int main() {   
     srand(time(NULL));
-    cout << "Hello\n";
+    cout << "creo albero\n";
     vector<int> chiavi{};
     vector<struct tree*> nodi{};
 
     int n = 5 * pow(10, 6); //5000k
-    int print = 5 * pow(10, 6); //500k
+    int print = 5 * pow(10, 5); //500k
 
     struct tree* albero = nullptr;
 
@@ -32,25 +32,31 @@ int main() {
         }
     }
     
-    cout << "\n Finito di caricare i dati\n"; 
+    cout << "Finito di caricare i dati\n"; 
     int a = 0; 
+    cout << "premere per continuare\n";
     cin >> a;
-    /*
+    cout << "distruggo albero\n";
+    
     for (int i = 0; i < n; i++) {
         /*
         struct tree *nodo  = BSTfind(v[i], albero);
         if (nodo == NULL) cout << "\nERROR\n";
         else albero = BSTdelete(albero, nodo, true);
-        //if (i % 200000 == 0) cout << i << " ";
-        
-        //delete t[i];
+        */
+        delete nodi[i];
+        if (i % print == 0) cout << i << "\n";
     }
-    */
+    
+    cout << "Ho distrutto tutto\n";
+
+    /*
     int contaChiamateDelete = 0;
     albero = destroyTree(albero, contaChiamateDelete);
 
     nodi.clear();
-    cout << "\nHo distrutto tutto: "<< contaChiamateDelete << endl;
+    cout << "eseguito " << contaChiamateDelete << "chiamate a destroy" << endl;
+    */
     /*
     for (auto i : t) {
         if (i->key >= 20000) cout << "Error" << endl;
@@ -67,5 +73,7 @@ int main() {
         //cout << i->key << " ";
     }
     */
-    cout << "\nFinito di controllare2\n";
+    cout << "Finito di controllare2\n";
+    cout << "ora eseguo while(true)\n";
+    while(true);
 }

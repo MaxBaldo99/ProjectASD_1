@@ -336,6 +336,7 @@ void destroyTree(struct tree *&node) {
 
  struct tree* destroyTree(struct tree*& root, int &volte) {
     volte++;
+    if(volte % 500000 == 0) cout << volte << endl;
     if (root == nullptr) return nullptr;
     //Elimino la le foglie
     if (root->left == nullptr && root->right == nullptr) {

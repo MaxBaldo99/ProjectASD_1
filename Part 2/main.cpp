@@ -13,7 +13,7 @@ using namespace chrono;
 #define vdd vector<duration<double>>
 
 vdd initialization();
-void execution(vdd tinit, int type, struct tree *(*function)(struct tree *root, struct tree *node));
+void execution(vdd tinit, int type, struct tree *(*function)(struct tree *& root, struct tree *node));
 void printToFile(vdd texec, vector<double> std, int type);
 string getAlgorithmName(int type);
 
