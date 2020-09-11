@@ -7,40 +7,40 @@
 #define max(x, y) (((x) > (y)) ? (x) : (y))
 
 struct tree *create(int key) {
-    struct tree *x = (struct tree *) malloc(sizeof(struct tree));
-    //x->details = NULL;
+    struct tree *x = new struct tree;
+    //x->details = nullptr;
     x->key = key;
-    x->parent = x->left = x->right = NULL;
+    x->parent = x->left = x->right = nullptr;
     x->height = -1;
     x->color = -1;
     return x;
 }
 
 struct tree *add(int key, bool left, char *details, struct tree *parent) {
-    struct tree *x = (struct tree *) malloc(sizeof(struct tree));
+    struct tree *x = new struct tree;
     x->key = key;
-    x->left = x->right = NULL;
-    //x->details = NULL;
+    x->left = x->right = nullptr;
+    //x->details = nullptr;
     x->height = -1;
     x->color = -1;
-    if(left && parent->left == NULL) {
+    if(left && parent->left == nullptr) {
         parent->left = x;
         x->parent = parent;
-    } else if (!left && parent->right == NULL) {
+    } else if (!left && parent->right == nullptr) {
         parent->right = x;
         x->parent = parent;
     } else {
-        printf("error: cannot add if NOT NULL");
+        printf("error: cannot add if NOT nullptr");
     }
     return x;
 }
 
 int height(const struct tree *node) {
-    return node == NULL ? 0 : node->height;
+    return node == nullptr ? 0 : node->height;
 }
 
 void preOrder(struct tree *node) {
-    if(node != NULL) {
+    if(node != nullptr) {
         print(node);
         preOrder(node->left);
         preOrder(node->right);
@@ -48,7 +48,7 @@ void preOrder(struct tree *node) {
 }
 
 void inOrder(struct tree *node) {
-    if(node != NULL) {
+    if(node != nullptr) {
         inOrder(node->left);
         print(node);
         inOrder(node->right);
@@ -56,7 +56,7 @@ void inOrder(struct tree *node) {
 }
 
 void postOrder(struct tree *node) {
-    if(node != NULL) {
+    if(node != nullptr) {
         print(node);
         postOrder(node->left);
         postOrder(node->right);
@@ -64,19 +64,19 @@ void postOrder(struct tree *node) {
 }
 
 
-//polish is same as pre order but with nulls printed too
+//polish is same as pre order but with nullptrs printed too
 void polishOrder(struct tree *node) {
     print(node);
-    if(node != NULL) {
+    if(node != nullptr) {
         polishOrder(node->left);
         polishOrder(node->right);
     }
 }
 
 void print(struct tree *node) {
-    if(node != NULL) {
+    if(node != nullptr) {
         printf("%d", node->key);
-        /*if(node->details != NULL) {
+        /*if(node->details != nullptr) {
             printf(":%s", node->details);
         }*/
         if(node->height >= 0) {
@@ -86,20 +86,20 @@ void print(struct tree *node) {
             printf(":%s", color(node->color));
         }
     } else {
-        printf("NULL");
+        printf("nullptr");
     }
     printf(" ");
 }
 
-struct tree *BSTinsert(struct tree *root, struct tree *node) {
-    struct tree *y = NULL;
-    y = (struct tree *) malloc(sizeof(struct tree));
-    struct tree *x = NULL;
-    x = (struct tree *) malloc(sizeof(struct tree));
+struct tree *BSTinsert(struct tree *&root, struct tree *node) {
+    struct tree *y = nullptr;
+    y = new struct tree;
+    struct tree *x = nullptr;
+    x = new struct tree;
 
-    y = NULL;
+    y = nullptr;
     x = root;
-    while(x != NULL) {
+    while(x != nullptr) {
         y = x;
         if(x->key > node->key) {
             x = x->left;
@@ -108,7 +108,7 @@ struct tree *BSTinsert(struct tree *root, struct tree *node) {
         }
     }
     //x = y;
-    if(y == NULL) {
+    if(y == nullptr) {
         root = node;
     } else {
         node->parent = y;
@@ -118,48 +118,48 @@ struct tree *BSTinsert(struct tree *root, struct tree *node) {
             y->right = node;
         }
     }
-    free(x);
+    delete x;
     return root;
 }
 
-struct tree *BSTfind(int key, struct tree *root) {
-    if(root == NULL || root->key == key) {
+struct tree *BSTfind(struct tree *root, int key) {
+    if(root == nullptr || root->key == key) {
         return root;
     } else if(key > root->key) {
-        return BSTfind(key, root->right);
+        return BSTfind(root->right, key);
     } else {
-        return BSTfind(key, root->left);
+        return BSTfind(root->left, key);
     }
 }
 
 /*
     algoritmo per cancellazione:
         - se 
-            almeno uno dei due figli è NULL allora posso cancellare il nodo
+            almeno uno dei due figli è nullptr allora posso cancellare il nodo
         - altrimenti
-            devo fare swap fra node e successore (che avrà almeno un figlio NULL)
+            devo fare swap fra node e successore (che avrà almeno un figlio nullptr)
             e poi potrò cancellare node
 */
 struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor) {
-    struct tree *deleteNode = (struct tree *) malloc(sizeof(struct tree));
-    if(node->left == NULL || node->right == NULL) {
-        //se almeno uno dei figli di node è NULL
+    struct tree *deleteNode = new struct tree;
+    if(node->left == nullptr || node->right == nullptr) {
+        //se almeno uno dei figli di node è nullptr
         deleteNode = node; 
     } else {
-        //se invece entrambi figli non sono NULL cerco successore
+        //se invece entrambi figli non sono nullptr cerco successore
         deleteNode = successor ? BSTsuccessor(node) : BSTpredecessor(node);
     }
-    //ora so che x ha almeno un figlio NULL
-    struct tree *delNodeSon = NULL;
-    //assegno a y il figlio non NULL (se esiste) di x
-    //y è NULL solo se successore di node è foglia
-    delNodeSon = deleteNode->left != NULL ? deleteNode->left : deleteNode->right;
-    if (delNodeSon != NULL) {
+    //ora so che x ha almeno un figlio nullptr
+    struct tree *delNodeSon = nullptr;
+    //assegno a y il figlio non nullptr (se esiste) di x
+    //y è nullptr solo se successore di node è foglia
+    delNodeSon = deleteNode->left != nullptr ? deleteNode->left : deleteNode->right;
+    if (delNodeSon != nullptr) {
         //genitore di y diventa il genitore di x
         delNodeSon->parent = deleteNode->parent;
     }
-    if(deleteNode->parent == NULL) {
-        //x è radice e ha almeno un figlio NULL
+    if(deleteNode->parent == nullptr) {
+        //x è radice e ha almeno un figlio nullptr
         root = delNodeSon; 
     } else if(deleteNode == deleteNode->parent->left) {
         //se x era un figlio sx, il nuovo figlio sx del padre di x è il figlio di x
@@ -176,7 +176,7 @@ struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor) {
     //free(node);
     //free(node->details);
     //free(x->details);
-    free(deleteNode);
+    delete deleteNode;
     //free(delNodeSon);
     return root;
 }
@@ -184,8 +184,8 @@ struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor) {
 //assume node is not the root, has a dad
 //node will go up
 struct tree *rightRotate(struct tree *root, struct tree *node) {
-    struct tree *oldDad = NULL;
-    struct tree *oldSon = NULL; //right son
+    struct tree *oldDad = nullptr;
+    struct tree *oldSon = nullptr; //right son
     oldDad = node->parent;
     oldSon = node->right;
     if(oldDad != root) {
@@ -199,12 +199,12 @@ struct tree *rightRotate(struct tree *root, struct tree *node) {
     } else {
         //node diventa radice
         root = node;
-        node->parent = NULL;
+        node->parent = nullptr;
     }
     node->right = oldDad;
     oldDad->left = oldSon;
     oldDad->parent = node;
-    if(oldSon != NULL) {
+    if(oldSon != nullptr) {
         oldSon->parent = oldDad;
     }
     return root;
@@ -213,11 +213,11 @@ struct tree *rightRotate(struct tree *root, struct tree *node) {
 //assume node is not the root, has a dad
 //node will go up
 struct tree *leftRotate(struct tree *root, struct tree *node) {
-    struct tree *oldDad = NULL;
-    struct tree *oldSon = NULL; //left son
+    struct tree *oldDad = nullptr;
+    struct tree *oldSon = nullptr; //left son
     oldDad = node->parent;
     oldSon = node->left;
-    if(node->parent->parent != NULL) { //uguale a dire node->parent == root
+    if(node->parent->parent != nullptr) { //uguale a dire node->parent == root
         //allaccio nonno node con node che diventa suo padre
         if(node->parent == node->parent->parent->left) {
             node->parent->parent->left = node;
@@ -228,12 +228,12 @@ struct tree *leftRotate(struct tree *root, struct tree *node) {
     } else {
         //node diventa radice
         root = node;
-        node->parent = NULL;
+        node->parent = nullptr;
     }
     node->left = oldDad;
     oldDad->right = oldSon;
     oldDad->parent = node;
-    if(oldSon != NULL) {
+    if(oldSon != nullptr) {
         oldSon->parent = oldDad;
     }
     return root;
@@ -269,11 +269,11 @@ struct tree *doubleRotateRightLeft(struct tree *root, struct tree *node) {
 }
 
 struct tree *BSTpredecessor(struct tree *node) {
-    if(node->left != NULL) {
+    if(node->left != nullptr) {
         return BSTmax(node->left);
     } else {
-        struct tree *y = (struct tree *) malloc(sizeof(struct tree));
-        while(y != NULL && node != y->right) {
+        struct tree *y = new struct tree;
+        while(y != nullptr && node != y->right) {
             node = y;
             y = node->parent;
         }
@@ -282,11 +282,11 @@ struct tree *BSTpredecessor(struct tree *node) {
 }
 
 struct tree *BSTsuccessor(struct tree *node) {
-    if(node->right != NULL) {
+    if(node->right != nullptr) {
         return BSTmin(node->right);
     } else {
-        struct tree *y = (struct tree *) malloc(sizeof(struct tree));
-        while(y != NULL && node != y->left) {
+        struct tree *y = new struct tree;
+        while(y != nullptr && node != y->left) {
             node = y;
             y = node->parent;
         }
@@ -295,42 +295,59 @@ struct tree *BSTsuccessor(struct tree *node) {
 }
 
 struct tree *BSTmin(struct tree *node) {
-    if(node == NULL) {
-        return NULL;
+    if(node == nullptr) {
+        return nullptr;
     } else {
         return goDeepOneDirection(node, true);
     }
 }
 
 struct tree *BSTmax(struct tree *node) {
-    if(node == NULL) {
-        return NULL;
+    if(node == nullptr) {
+        return nullptr;
     } else {
         return goDeepOneDirection(node, false);
     }
 }
 
-//error if node == NULL
+//error if node == nullptr
 struct tree *goDeepOneDirection(struct tree *node, bool left) {
     struct tree *next = left ? node->left : node->right;
-    if(next == NULL) {
+    if(next == nullptr) {
         return node;
     } else {
         return goDeepOneDirection(next, left);
     }
 }
-
-void destroyTree(struct tree *node) {
-    if(node != NULL) {
+/*
+void destroyTree(struct tree *&node) {
+    if(node != nullptr) {
         //if not necessary, useful to reduce stack calls
-        if(node->left != NULL) { 
+        if(node->left != nullptr) { 
             destroyTree(node->left);
         }
-        if(node->right != NULL) {
+        if(node->right != nullptr) {
             destroyTree(node->right);
         }
         //free(node->details);
-        free(node);
+        delete node;
+    }
+}*/
+
+ struct tree* destroyTree(struct tree*& root, int &volte) {
+    volte++;
+    if (root == nullptr) return nullptr;
+    //Elimino la le foglie
+    if (root->left == nullptr && root->right == nullptr) {
+        delete root;
+        return nullptr;
+    }
+    else {
+        //Elimino ricorsivamente i figli
+        if (root->left != nullptr) root->left = destroyTree(root->left, volte);
+        if (root->right != nullptr) root->right = destroyTree(root->right, volte);
+        //Elimino la root
+        return destroyTree(root, volte);
     }
 }
 
@@ -341,7 +358,7 @@ void destroyTree(struct tree *node) {
 //then do it to his father
 //go up to the root, stops if node->height doesnt change
 void AVLupdateHeight(struct tree *node) {
-    if(node != NULL) {
+    if(node != nullptr) {
         AVLchangeHeight(node);
         AVLupdateHeight(node->parent);
     }
@@ -349,19 +366,19 @@ void AVLupdateHeight(struct tree *node) {
 
 //set node->height to 1 + max of height of his sons
 void AVLchangeHeight(struct tree *node) {
-    if(node != NULL) {
+    if(node != nullptr) {
         node->height = 1 + max(h(node->left), h(node->right));
     }
 } 
 
 //insert node and balance tree
-struct tree *AVLinsert(struct tree *root, struct tree *node) {
+struct tree *AVLinsert(struct tree *&root, struct tree *node) {
     root = BSTinsert(root, node);
     AVLupdateHeight(node);
     //polishOrder(root);
     //printf("\n");
     //balance only if have dad and grandad, otherwise already balanced
-    if(node->parent != NULL && node->parent->parent != NULL) {
+    if(node->parent != nullptr && node->parent->parent != nullptr) {
         root = AVLbalanceIfNeeded(root, node->parent->parent);
     }
     return root;
@@ -369,12 +386,12 @@ struct tree *AVLinsert(struct tree *root, struct tree *node) {
 
 //delete node and balance it
 struct tree *AVLdelete(struct tree *root, struct tree *node) {
-    struct tree *temp = NULL;
-    if(node->left == NULL || node->right == NULL) {
-        if(node->left == NULL && node->right == NULL) {
+    struct tree *temp = nullptr;
+    if(node->left == nullptr || node->right == nullptr) {
+        if(node->left == nullptr && node->right == nullptr) {
             temp = node->parent;
         } else {
-            temp = node->left == NULL ? node->right : node->left;
+            temp = node->left == nullptr ? node->right : node->left;
         }
     } else {
         temp = BSTmin(node->right)->parent;
@@ -382,14 +399,14 @@ struct tree *AVLdelete(struct tree *root, struct tree *node) {
     root = BSTdelete(root, node, true);
     AVLupdateHeight(temp);
 
-    if(temp != NULL) {
+    if(temp != nullptr) {
         root = AVLbalanceIfNeeded(root, temp);
     }
     return root;
 }
 
 struct tree *AVLbalanceIfNeeded(struct tree *root, struct tree *node) {
-    if(node != NULL) {
+    if(node != nullptr) {
         int dif = hDiff(node);
         if(dif < -1) {
             root = AVLfixUp(root, node->right);
@@ -404,9 +421,9 @@ struct tree *AVLbalanceIfNeeded(struct tree *root, struct tree *node) {
 
 //balance tree
 struct tree *AVLfixUp(struct tree *root, struct tree *node) {
-    if(node != NULL) {
+    if(node != nullptr) {
         struct tree *dad = node->parent;
-        if(dad != NULL) {
+        if(dad != nullptr) {
             struct tree *son = h(node->left) > h(node->right) ? node->left : node->right;
             int dadHDif = hDiff(dad);
             int nodeHDif = hDiff(node);
@@ -441,13 +458,13 @@ struct tree *AVLfixUp(struct tree *root, struct tree *node) {
 #pragma region RBT
 
 //insert node and eventually balance tree
-struct tree *RBTinsert(struct tree *root, struct tree *node) {
+struct tree *RBTinsert(struct tree *&root, struct tree *node) {
     root = BSTinsert(root, node);
     node->color = node == root ? black : red;
     //polishOrder(root);
     //printf("\n");
     //balance only if have dad and grandad, otherwise already balanced
-    if(node->parent != NULL && node->parent->parent != NULL && node->parent->color == red) {
+    if(node->parent != nullptr && node->parent->parent != nullptr && node->parent->color == red) {
         root = RBTfixUpOnInsert(root, node);
     }
     return root;
@@ -472,7 +489,7 @@ struct tree *RBTjoinPrivate(struct tree *T1, struct tree *T2, struct tree *x) {
         //se chiavi t1 sono maggiori t1 ==> scendo sempre a dx
         node = T1->key < T2->key ? node->left : node->right;
     }
-    struct tree *y = NULL;
+    struct tree *y = nullptr;
     if(T1->key < T2->key) {
         //chiavi in T1 sono tutte minori di T2 ==> min(T1) diventa minimo generale
         y = node->left;
@@ -493,7 +510,7 @@ struct tree *RBTjoinPrivate(struct tree *T1, struct tree *T2, struct tree *x) {
 }
 
 int RBTblackHeight(struct tree *node) {
-    if(node == NULL) return 0;
+    if(node == nullptr) return 0;
     else {
         int bh = node->left->color == black ? 1 : 0;
         return bh + RBTblackHeight(node->left);
@@ -501,16 +518,16 @@ int RBTblackHeight(struct tree *node) {
 }
 
 struct tree *RBTfixUpOnInsert(struct tree *root, struct tree *node) {
-    if(node != NULL && node->parent != NULL && node->parent->color == red) {
+    if(node != nullptr && node->parent != nullptr && node->parent->color == red) {
         bool leftSon = leftSon(node);
         bool uncleIsOpp = true;
         struct tree *uncl = uncle(node, &uncleIsOpp);
-        if((uncl == NULL || uncl->color == black) && uncleIsOpp) {
+        if((uncl == nullptr || uncl->color == black) && uncleIsOpp) {
             //caso fortunato: zio black opposto a x
             node->parent->color = black;
             node->parent->parent->color = red;
             root = leftSon ? rightRotate(root, node->parent) : leftRotate(root, node->parent);
-        } else if(uncl == NULL || uncl->color == black) {
+        } else if(uncl == nullptr || uncl->color == black) {
             //caso quasi fortunato: zio black non opposto a x
             struct tree *dad = node->parent;
             root = leftSon ? rightRotate(root, node) : leftRotate(root, node);
@@ -520,14 +537,14 @@ struct tree *RBTfixUpOnInsert(struct tree *root, struct tree *node) {
             node->parent->parent->color = red;
             root = RBTfixUpOnInsert(root, node->parent->parent);
         }
-    } else if(node != NULL && root == node) {
+    } else if(node != nullptr && root == node) {
         node->color = black; //convenzione
     }
     return root;
 }
 
 struct tree *uncle(struct tree *node, bool *isOpposite) { 
-    if(node != NULL && node->parent != NULL && node->parent->parent != NULL) {
+    if(node != nullptr && node->parent != nullptr && node->parent->parent != nullptr) {
         if(leftSon(node->parent)) {
             *isOpposite = leftSon(node);
             return node->parent->parent->right;
@@ -536,24 +553,24 @@ struct tree *uncle(struct tree *node, bool *isOpposite) {
             return node->parent->parent->left;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 struct tree *RBTdelete(struct tree *root, struct tree *node) {
-    struct tree *temp = NULL;
-    struct tree *tempSon = NULL;
-    struct tree *tempDad = NULL;
+    struct tree *temp = nullptr;
+    struct tree *tempSon = nullptr;
+    struct tree *tempDad = nullptr;
     bool fixUp = true;
-    if(node->left == NULL || node->right == NULL) {
+    if(node->left == nullptr || node->right == nullptr) {
         temp = node;
     } else {
         temp = BSTpredecessor(node);
     }
     bool tempLeft = leftSon(temp);
     tempDad = temp->parent;
-    tempSon = temp->left == NULL ? temp->right : temp->left;
-    fixUp = (temp->color == black && (tempSon == NULL || tempSon->color == black));
-    if(!fixUp && tempSon != NULL && tempSon->color == red) {
+    tempSon = temp->left == nullptr ? temp->right : temp->left;
+    fixUp = (temp->color == black && (tempSon == nullptr || tempSon->color == black));
+    if(!fixUp && tempSon != nullptr && tempSon->color == red) {
         tempSon->color = black;
     }
     root = BSTdelete(root, node, false);
@@ -565,21 +582,21 @@ struct tree *RBTdelete(struct tree *root, struct tree *node) {
 
 struct tree *RBTfixUpOnDelete(struct tree *root, struct tree *node, struct tree *dad, bool nodeLeft) { 
     struct tree *brother = nodeLeft ? dad->right : dad->left;
-    if((node == NULL || node->color == black) && brother != NULL) {
+    if((node == nullptr || node->color == black) && brother != nullptr) {
         bool isOpposite = false;
         struct tree *nephew = RBToppositeRedSon(brother, &isOpposite);
-        if(nephew != NULL && nephew->color == red && isOpposite) {
+        if(nephew != nullptr && nephew->color == red && isOpposite) {
             //caso fortunato: node ha nipote red e opposto
             nephew->color = black;
             brother->color = dad->color;
             dad->color = black;
             root = nodeLeft ? leftRotate(root, brother) : rightRotate(root, brother);
-        } else if (nephew != NULL && nephew->color == red) {
+        } else if (nephew != nullptr && nephew->color == red) {
             //caso quasi fortunato: node ha nipote red non opposto
             nephew->color = black;
             brother->color = red;
             root = leftSon(nephew) ? rightRotate(root, nephew) : leftRotate(root, nephew);
-        } else if (brother->color == black && (nephew == NULL || nephew->color == black)) {
+        } else if (brother->color == black && (nephew == nullptr || nephew->color == black)) {
             //caso sfortunato: node ha nipoti e fratello black
             if(dad->color == red) {
                 dad->color = black;
@@ -587,7 +604,7 @@ struct tree *RBTfixUpOnDelete(struct tree *root, struct tree *node, struct tree 
             } else {
                 root = RBTfixUpOnDelete(root, dad, dad->parent, leftSon(dad));
             }
-        } else if(brother->color == red && (nephew == NULL || nephew->color == black)) {
+        } else if(brother->color == red && (nephew == nullptr || nephew->color == black)) {
             brother->color = black;
             dad->color = red;
             root = nodeLeft ? leftRotate(root, brother) : rightRotate(root, brother);
@@ -604,26 +621,26 @@ struct tree *RBTfixUpOnDelete(struct tree *root, struct tree *node, struct tree 
 //se esiste, ritorna il nipote rosso e opposto
 //se esiste, ritorna l'altro nipote rosso
 //se esiste, ritorna un nipote nero
-//else, NULL se non ha nipoti
+//else, nullptr se non ha nipoti
 struct tree *RBToppositeRedSon(struct tree *node, bool *isOpposite) {
-    if(node != NULL) {
-        if(*isOpposite = (!leftSon(node) && node->right != NULL && node->right->color == red)) {
+    if(node != nullptr) {
+        if(*isOpposite = (!leftSon(node) && node->right != nullptr && node->right->color == red)) {
             return node->right;
         }
-        if(*isOpposite = (leftSon(node) && node->left != NULL && node->left->color == red)) {
+        if(*isOpposite = (leftSon(node) && node->left != nullptr && node->left->color == red)) {
             return node->left;
         }
         *isOpposite = false;
-        if(node->right != NULL && node->right->color == red) return node->right;
-        if(node->left != NULL && node->left->color == red) return node->left;
-        return node->left != NULL ? node->left : node->right;
+        if(node->right != nullptr && node->right->color == red) return node->right;
+        if(node->left != nullptr && node->left->color == red) return node->left;
+        return node->left != nullptr ? node->left : node->right;
     }
-    return NULL;
+    return nullptr;
 }
 
 struct tree *brother(struct tree *node) {
-    if(node == NULL || node->parent == NULL) {
-        return NULL;
+    if(node == nullptr || node->parent == nullptr) {
+        return nullptr;
     } else {
         return node == node->parent->left ? node->parent->right : node->parent->left;
     }
@@ -633,17 +650,17 @@ struct tree *brother(struct tree *node) {
 //-------------------------------------------------------------------------------------------
 
 void printTreeNice(struct tree *root, struct tree *node, int i, int level, int printed, bool left) {
-    if(node != NULL) {
+    if(node != nullptr) {
         if(printed == 0) {
             for(int i = 0; i < h(root) - level - 1; i++) {
                 printf("\t");
             }
         }
-        struct tree *next = NULL;
-        struct tree *dad = NULL;
+        struct tree *next = nullptr;
+        struct tree *dad = nullptr;
         dad = next = node;
         //scendi
-        while(i < level && next != NULL) {
+        while(i < level && next != nullptr) {
             dad = next;
             next = nextNode(next, left);
             i++;
@@ -654,7 +671,7 @@ void printTreeNice(struct tree *root, struct tree *node, int i, int level, int p
         if(level == 1) {
             printf("\t");
         }
-        if(next != root && dad != NULL) {
+        if(next != root && dad != nullptr) {
             print(dad->right);
             printed++;
         }
@@ -699,19 +716,14 @@ int power(int base, int exp) {
 }
 
 struct tree *nextNode(struct tree *node, bool left) {
-    return node == NULL ? NULL : left ? node->left : node->right;
+    return node == nullptr ? nullptr : left ? node->left : node->right;
 }
 
-bool isBST(struct tree *bt) {
-    bool bst = true;
-    bst = isBSTPrivate(bt, -__INT32_MAX__, __INT32_MAX__);
-    return bst;
-}
 
 bool isBSTPrivate(struct tree *bt, int l, int r) {
 
     bool bst = true;
-    if(bt != NULL) {
+    if(bt != nullptr) {
         bst = (bt->key > l && bt->key < r);
         if(bst) {
             bst = isBSTPrivate(bt->left, l, bt->key);

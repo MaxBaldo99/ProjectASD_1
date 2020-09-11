@@ -5,7 +5,8 @@
 #include "chrono"
 #include "headers/time.h"
 #include "headers/tree.h"
-#include "headers/tree.c"
+#include "headers/tree.cpp"
+//#include "headers/tree.c"
 
 using namespace chrono;
 
@@ -78,7 +79,7 @@ vdd initialization() {
     return tinit;
 }
 
-void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, struct tree *))) {
+void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, struct tree *))) {
     int nElements = startingLength;
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd texec(nOfArrays);
@@ -98,14 +99,15 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *, str
                 struct tree *tree = NULL;
                 for(int k = 0; k < nElements; k++) {
                     int random = rand();
-                    if(BSTfind(random, tree) == NULL) {
+                    if(BSTfind(tree, random) == nullptr) {
                         struct tree *node = create(random);
                         tree = std::__invoke(function, tree, node);
                         nOfMake[j]++;
                     }
                 }
                 //bool ok = isBST(tree);
-                destroyTree(tree);
+                int x = 0;
+                destroyTree(tree, x);
                 tree = NULL;
             }
             end = steady_clock::now();

@@ -24,13 +24,13 @@ struct tree *add(int key, bool left, char *details, struct tree *parent);
 void preOrder(struct tree *node);
 void inOrder(struct tree *node);
 void postOrder(struct tree *node);
-struct tree* destroyTree(struct tree *& node,  int& volte);
+void destroyTree(struct tree *node);
 void polishOrder(struct tree *node);
 struct tree *goDeepOneDirection(struct tree *node, bool left);
 
 //BST Tree
-struct tree *BSTinsert(struct tree *&root, struct tree *node);
-struct tree *BSTfind(struct tree *root, int key);
+struct tree *BSTinsert(struct tree *root, struct tree *node);
+struct tree *BSTfind(int key, struct tree *root);
 struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor);
 struct tree *BSTpredecessor(struct tree *node);
 struct tree *BSTsuccessor(struct tree *node);
@@ -51,7 +51,7 @@ struct tree *doubleRotateRightLeft(struct tree *root, struct tree *node);
 void AVLupdateHeight(struct tree *node);
 void AVLchangeHeight(struct tree *node);
 struct tree *AVLdelete(struct tree *root, struct tree *node);
-struct tree *AVLinsert(struct tree *&root, struct tree *node);
+struct tree *AVLinsert(struct tree *root, struct tree *node);
 struct tree *AVLbalanceIfNeeded(struct tree *root, struct tree *node);
 struct tree *AVLfixUp(struct tree *root, struct tree *node);
 
@@ -60,7 +60,7 @@ struct tree *AVLfixUp(struct tree *root, struct tree *node);
 #define color(x) (x == 0 ? "red" : x == 1 ? "black" : "colorError")
 #define red 0
 #define black 1
-struct tree *RBTinsert(struct tree *&root, struct tree *node);
+struct tree *RBTinsert(struct tree *root, struct tree *node);
 struct tree *RBTjoinPublic(struct tree *T1, struct tree *T2, int key);
 struct tree *RBTjoinPrivate(struct tree *T1, struct tree *T2, struct tree *x);
 int RBTblackHeight(struct tree *node);
