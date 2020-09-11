@@ -8,7 +8,7 @@
 
 struct tree *create(int key) {
     struct tree *x = (struct tree *) malloc(sizeof(struct tree));
-    x->details = NULL;
+    //x->details = NULL;
     x->key = key;
     x->parent = x->left = x->right = NULL;
     x->height = -1;
@@ -20,7 +20,7 @@ struct tree *add(int key, bool left, char *details, struct tree *parent) {
     struct tree *x = (struct tree *) malloc(sizeof(struct tree));
     x->key = key;
     x->left = x->right = NULL;
-    x->details = NULL;
+    //x->details = NULL;
     x->height = -1;
     x->color = -1;
     if(left && parent->left == NULL) {
@@ -76,9 +76,9 @@ void polishOrder(struct tree *node) {
 void print(struct tree *node) {
     if(node != NULL) {
         printf("%d", node->key);
-        if(node->details != NULL) {
+        /*if(node->details != NULL) {
             printf(":%s", node->details);
-        }
+        }*/
         if(node->height >= 0) {
             printf(":%d", node->height);
         }
@@ -171,7 +171,7 @@ struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor) {
     if(deleteNode != node) {
         //x è il successore di node
         node->key = deleteNode->key;
-        node->details = deleteNode->details;
+        //node->details = deleteNode->details;
     }
     //free(node);
     //free(node->details);
@@ -329,7 +329,7 @@ void destroyTree(struct tree *node) {
         if(node->right != NULL) {
             destroyTree(node->right);
         }
-        free(node->details);
+        //free(node->details);
         free(node);
     }
 }

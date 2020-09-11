@@ -10,7 +10,7 @@ struct tree
     int key;
     int height;
     int color;
-    char *details;
+    //char *details;
     struct tree *left;
     struct tree *right;
     struct tree *parent;
