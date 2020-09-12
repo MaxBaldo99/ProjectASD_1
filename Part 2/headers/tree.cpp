@@ -7,7 +7,7 @@
 #define max(x, y) (((x) > (y)) ? (x) : (y))
 
 struct tree *create(int key) {
-    struct tree *x = new struct tree;
+    struct tree *x = new tree;
     //x->details = nullptr;
     x->key = key;
     x->parent = x->left = x->right = nullptr;
@@ -93,11 +93,8 @@ void print(struct tree *node) {
 
 struct tree *BSTinsert(struct tree *&root, struct tree *node) {
     struct tree *y = nullptr;
-    y = new struct tree;
     struct tree *x = nullptr;
-    x = new struct tree;
 
-    y = nullptr;
     x = root;
     while(x != nullptr) {
         y = x;
@@ -122,6 +119,77 @@ struct tree *BSTinsert(struct tree *&root, struct tree *node) {
     return root;
 }
 
+void BSTinserta(struct tree*& root, int key) {
+    if (root == nullptr) 
+        root = create(key);
+    //Destra
+    else if (root->key < key)
+        if (root->right == nullptr) 
+            root->right = create(key);
+        else						
+            BSTinserta(root->right, key);
+
+    //Sinistra
+    else
+        if (root->left == nullptr)	
+            root->left = create(key);
+        else						
+            BSTinserta(root->left, key);
+}
+
+void BSTinsertb(struct tree *root, int key) {
+    struct tree* to_insert = create(key);
+    struct tree* iter = root, *prev = nullptr;
+
+    //Cerco dove inserire il nodo
+    while (iter != nullptr) {
+        prev = iter;
+        if (key <= iter->key)   
+            iter = iter->left;
+        else                    
+            iter = iter->right;
+    }
+
+    //Inserisco il nodo
+    if (key <= prev->key)       
+        prev->left = to_insert;
+    else                        
+        prev->right = to_insert;
+
+    to_insert->parent = prev;
+}
+
+void BSTinsert2(struct tree* root, int key) {
+    struct tree* node = create(key);
+    struct tree* y = nullptr;
+    struct tree* x = nullptr;
+
+    y = nullptr;
+    x = root;
+    while (x != nullptr) {
+        y = x;
+        if (x->key > node->key) {
+            x = x->left;
+        }
+        else {
+            x = x->right;
+        }
+    }
+    //x = y;
+    if (y == nullptr) {
+        root = node;
+    }
+    else {
+        node->parent = y;
+        if (node->key < y->key) {
+            y->left = node;
+        }
+        else {
+            y->right = node;
+        }
+    }
+}
+
 struct tree *BSTfind(struct tree *root, int key) {
     if(root == nullptr || root->key == key) {
         return root;
@@ -141,42 +209,42 @@ struct tree *BSTfind(struct tree *root, int key) {
             e poi potrò cancellare node
 */
 struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor) {
-    struct tree *deleteNode = new struct tree;
+    struct tree *delNode = nullptr;
     if(node->left == nullptr || node->right == nullptr) {
         //se almeno uno dei figli di node è nullptr
-        deleteNode = node; 
+        delNode = node; 
     } else {
         //se invece entrambi figli non sono nullptr cerco successore
-        deleteNode = successor ? BSTsuccessor(node) : BSTpredecessor(node);
+        delNode = successor ? BSTsuccessor(node) : BSTpredecessor(node);
     }
     //ora so che x ha almeno un figlio nullptr
     struct tree *delNodeSon = nullptr;
     //assegno a y il figlio non nullptr (se esiste) di x
     //y è nullptr solo se successore di node è foglia
-    delNodeSon = deleteNode->left != nullptr ? deleteNode->left : deleteNode->right;
+    delNodeSon = delNode->left != nullptr ? delNode->left : delNode->right;
     if (delNodeSon != nullptr) {
         //genitore di y diventa il genitore di x
-        delNodeSon->parent = deleteNode->parent;
+        delNodeSon->parent = delNode->parent;
     }
-    if(deleteNode->parent == nullptr) {
+    if(delNode->parent == nullptr) {
         //x è radice e ha almeno un figlio nullptr
         root = delNodeSon; 
-    } else if(deleteNode == deleteNode->parent->left) {
+    } else if(delNode == delNode->parent->left) {
         //se x era un figlio sx, il nuovo figlio sx del padre di x è il figlio di x
-        deleteNode->parent->left = delNodeSon;
+        delNode->parent->left = delNodeSon;
     } else {
         //se x era un figlio dx, il nuovo figlio dx del padre di x è il figlio di x
-        deleteNode->parent->right = delNodeSon;
+        delNode->parent->right = delNodeSon;
     }
-    if(deleteNode != node) {
+    if(delNode != node) {
         //x è il successore di node
-        node->key = deleteNode->key;
+        node->key = delNode->key;
         //node->details = deleteNode->details;
     }
     //free(node);
     //free(node->details);
     //free(x->details);
-    delete deleteNode;
+    delete delNode;
     //free(delNodeSon);
     return root;
 }
@@ -272,7 +340,7 @@ struct tree *BSTpredecessor(struct tree *node) {
     if(node->left != nullptr) {
         return BSTmax(node->left);
     } else {
-        struct tree *y = new struct tree;
+        struct tree *y = node;
         while(y != nullptr && node != y->right) {
             node = y;
             y = node->parent;
@@ -285,7 +353,7 @@ struct tree *BSTsuccessor(struct tree *node) {
     if(node->right != nullptr) {
         return BSTmin(node->right);
     } else {
-        struct tree *y = new struct tree;
+        struct tree *y = node;
         while(y != nullptr && node != y->left) {
             node = y;
             y = node->parent;
@@ -319,22 +387,24 @@ struct tree *goDeepOneDirection(struct tree *node, bool left) {
         return goDeepOneDirection(next, left);
     }
 }
-/*
-void destroyTree(struct tree *&node) {
+
+void destroyTree(struct tree *&node, int &volte) {
+    volte++;
+    if(volte % 500000 == 0) cout << volte << endl;
     if(node != nullptr) {
         //if not necessary, useful to reduce stack calls
         if(node->left != nullptr) { 
-            destroyTree(node->left);
+            destroyTree(node->left, volte);
         }
         if(node->right != nullptr) {
-            destroyTree(node->right);
+            destroyTree(node->right, volte);
         }
         //free(node->details);
         delete node;
     }
-}*/
+}
 
- struct tree* destroyTree(struct tree*& root, int &volte) {
+ struct tree* destroyTreeRasera(struct tree*& root, int &volte) {
     volte++;
     if(volte % 500000 == 0) cout << volte << endl;
     if (root == nullptr) return nullptr;
@@ -345,10 +415,11 @@ void destroyTree(struct tree *&node) {
     }
     else {
         //Elimino ricorsivamente i figli
-        if (root->left != nullptr) root->left = destroyTree(root->left, volte);
-        if (root->right != nullptr) root->right = destroyTree(root->right, volte);
+        if (root->left != nullptr) root->left = destroyTreeRasera(root->left, volte);
+        if (root->right != nullptr) root->right = destroyTreeRasera(root->right, volte);
         //Elimino la root
-        return destroyTree(root, volte);
+        delete root;
+        return nullptr;
     }
 }
 

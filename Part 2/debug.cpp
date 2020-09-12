@@ -11,52 +11,56 @@
 int main() {   
     srand(time(NULL));
     cout << "creo albero\n";
-    vector<int> chiavi{};
-    vector<struct tree*> nodi{};
+    //vector<int> chiavi{};
+    //vector<struct tree*> nodi{};
 
-    int n = 5 * pow(10, 6); //5000k
-    int print = 5 * pow(10, 5); //500k
+    int n = 10 * pow(10, 6); //5000k
+    int print = 1 * pow(10, 6); //500k
 
-    struct tree* albero = nullptr;
-
+    struct tree *albero = nullptr;
+    
     for (int i = 0; i < n; i++) {
         int rnd = rand();
         if(BSTfind(albero, rnd) == nullptr) {
-            struct tree* nodo = create(rnd);
-            chiavi.push_back(rnd);
-            nodi.push_back(nodo);
-            albero = BSTinsert(albero, nodi[i]);
+            //struct tree* nodo = create(rnd);
+            //chiavi.push_back(rnd);
+            //nodi.push_back(nodo);
+            BSTinserta(albero, rnd);
             if (i % print == 0) cout << i << "\n";
         } else {
             i--;
         }
     }
     
-    cout << "Finito di caricare i dati\n"; 
-    int a = 0; 
-    cout << "premere per continuare\n";
-    cin >> a;
+    cout << "Finito di caricare i dati\n";
+    cout << "premere per svuotare la memoria\n";
+    char c = 0; 
+    cin >> c;
     cout << "distruggo albero\n";
     
     for (int i = 0; i < n; i++) {
         /*
-        struct tree *nodo  = BSTfind(v[i], albero);
+        struct tree *nodo  = BSTfind(albero, chiavi[i]);
         if (nodo == NULL) cout << "\nERROR\n";
         else albero = BSTdelete(albero, nodo, true);
         */
-        delete nodi[i];
-        if (i % print == 0) cout << i << "\n";
+        
+        //delete nodi[i];
+        //if (i % print == 0) cout << i << "\n";
+        
     }
+    
+    int contaChiamateDelete = 0;
+    albero = destroyTreeRasera(albero, contaChiamateDelete);
+    cout << "eseguito " << contaChiamateDelete << " chiamate a destroy" << endl;
+    
+    //delete albero;
     
     cout << "Ho distrutto tutto\n";
 
-    /*
-    int contaChiamateDelete = 0;
-    albero = destroyTree(albero, contaChiamateDelete);
-
-    nodi.clear();
-    cout << "eseguito " << contaChiamateDelete << "chiamate a destroy" << endl;
-    */
+    //nodi.clear();
+   
+    
     /*
     for (auto i : t) {
         if (i->key >= 20000) cout << "Error" << endl;
@@ -73,7 +77,7 @@ int main() {
         //cout << i->key << " ";
     }
     */
-    cout << "Finito di controllare2\n";
+    //cout << "Finito di controllare2\n";
     cout << "ora eseguo while(true)\n";
     while(true);
 }
