@@ -91,10 +91,12 @@ void print(struct tree *node) {
     printf(" ");
 }
 
-struct tree *BSTinsert(struct tree *&root, struct tree *node) {
+void BSTinsert(struct tree *root, int key) {
+    struct tree* node = create(key);
     struct tree *y = nullptr;
     struct tree *x = nullptr;
 
+    y = nullptr;
     x = root;
     while(x != nullptr) {
         y = x;
@@ -115,8 +117,6 @@ struct tree *BSTinsert(struct tree *&root, struct tree *node) {
             y->right = node;
         }
     }
-    delete x;
-    return root;
 }
 
 void BSTinserta(struct tree*& root, int key) {
@@ -190,13 +190,13 @@ void BSTinsert2(struct tree* root, int key) {
     }
 }
 
-struct tree *BSTfind(struct tree *root, int key) {
+struct tree *BSTfind(int key, struct tree *root) {
     if(root == nullptr || root->key == key) {
         return root;
     } else if(key > root->key) {
-        return BSTfind(root->right, key);
+        return BSTfind(key, root->right);
     } else {
-        return BSTfind(root->left, key);
+        return BSTfind(key, root->left);
     }
 }
 

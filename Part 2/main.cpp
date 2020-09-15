@@ -99,9 +99,9 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, st
                 struct tree *tree = NULL;
                 for(int k = 0; k < nElements; k++) {
                     int random = rand();
-                    if(BSTfind(tree, random) == nullptr) {
-                        struct tree *node = create(random);
-                        tree = std::__invoke(function, tree, node);
+                    if (tree == nullptr) tree = create(random);
+                    else if (BSTfind(random, tree) == nullptr) { 
+                        BSTinsert(tree, random);
                         nOfMake[j]++;
                     }
                 }
