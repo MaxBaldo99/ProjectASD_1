@@ -2,15 +2,18 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include <iostream>
 #include "tree.h"
+
+using namespace std;
 
 #define max(x, y) (((x) > (y)) ? (x) : (y))
 
 struct tree *create(int key) {
-    struct tree *x = new tree;
+    struct tree *x = new struct tree;
     //x->details = nullptr;
     x->key = key;
-    x->parent = x->left = x->right = nullptr;
+    x->left = x->right = nullptr;
     x->height = -1;
     x->color = -1;
     return x;
@@ -91,8 +94,7 @@ void print(struct tree *node) {
     printf(" ");
 }
 
-void BSTinsert(struct tree *root, int key) {
-    struct tree* node = create(key);
+struct tree *BSTinsert(struct tree *&root, struct tree *node) {
     struct tree *y = nullptr;
     struct tree *x = nullptr;
 
@@ -117,6 +119,7 @@ void BSTinsert(struct tree *root, int key) {
             y->right = node;
         }
     }
+    return root;
 }
 
 void BSTinserta(struct tree*& root, int key) {
@@ -401,6 +404,23 @@ void destroyTree(struct tree *&node, int &volte) {
         }
         //free(node->details);
         delete node;
+    }
+}
+
+struct tree* destroyTreeR(struct tree*& root, int &volte) {
+    volte++;
+    if (root == nullptr) return nullptr;
+    //Elimino la le foglie
+    if (root->left == nullptr && root->right == nullptr) {
+        delete root;
+        return nullptr;
+    }
+    else {
+        //Elimino ricorsivamente i figli
+        if (root->left != nullptr) root->left = destroyTreeR(root->left, volte);
+        if (root->right != nullptr) root->right = destroyTreeR(root->right, volte);
+        //Elimino la root
+        return destroyTreeR(root, volte);
     }
 }
 

@@ -101,14 +101,15 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, st
                     int random = rand();
                     if (tree == nullptr) tree = create(random);
                     else if (BSTfind(random, tree) == nullptr) { 
-                        BSTinsert(tree, random);
+                        struct tree *node = create(random);
+                        BSTinsert(tree, node);
                         nOfMake[j]++;
                     }
                 }
                 //bool ok = isBST(tree);
                 int x = 0;
-                destroyTree(tree, x);
-                tree = NULL;
+                destroyTreeR(tree, x);
+                //tree = NULL;
             }
             end = steady_clock::now();
             ttoti[h] = (duration<double>)((end - start) / nTimes);
