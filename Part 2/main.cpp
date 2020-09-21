@@ -40,8 +40,8 @@ int main() {
     }
     myfile.close();
     cout << "eseguo\n";
-    execution(RBT, &RBTinsert);
     execution(AVL, &AVLinsert);
+    execution(RBT, &RBTinsert);
     execution(BST, &BSTinsert);
     
     return 0;
@@ -75,7 +75,9 @@ void execution(int type, struct tree *((*function)(struct tree *&, struct tree *
                         tree = std::__invoke(function, tree, node);
                         nOfMake[j]++;
                     }
-                    cout << k << ": rand -> " << random << endl;
+                    cout << endl << "k: " << k << ", rand: " << random << endl;
+                    polishOrder(tree);
+                    cout << endl;
                 }
                 //bool ok = isBST(tree);
                 tree = destroyTree(tree);

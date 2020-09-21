@@ -89,7 +89,7 @@ void print(struct tree *node) {
             printf(":%s", color(node->color));
         }
     } else {
-        printf("nullptr");
+        printf("NULL");
     }
     printf(" ");
 }
