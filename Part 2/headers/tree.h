@@ -18,7 +18,7 @@ struct tree
 
 //generic binary tree
 //return in node is a left or right son
-#define leftSon(x) (x->parent->left == x ? true : false)
+#define isLeftSon(x) (x->parent->left == x ? true : false)
 struct tree *create(int key);
 struct tree *add(int key, bool left, char *details, struct tree *parent);
 void preOrder(struct tree *node);

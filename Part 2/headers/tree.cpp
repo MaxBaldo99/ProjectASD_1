@@ -122,13 +122,13 @@ struct tree *BSTinsert(struct tree *&root, struct tree *node) {
     return root;
 }
 
-struct tree *BSTfind(int key, struct tree *root) {
+struct tree *BSTfind(struct tree *root, int key) {
     if(root == nullptr || root->key == key) {
         return root;
     } else if(key > root->key) {
-        return BSTfind(key, root->right);
+        return BSTfind(root->right, key);
     } else {
-        return BSTfind(key, root->left);
+        return BSTfind(root->left, key);
     }
 }
 
@@ -447,7 +447,6 @@ struct tree *AVLfixUp(struct tree *root, struct tree *node) {
             struct tree *son = h(node->left) > h(node->right) ? node->left : node->right;
             int dadHDif = hDiff(dad);
             int nodeHDif = hDiff(node);
-            bool a, b;
             if(abs(dadHDif) > 1) {
                 if((dadHDif > 1 && nodeHDif < 0) || (dadHDif < -1 && nodeHDif > 0)) {
                     if(dadHDif > 1) {
@@ -539,20 +538,21 @@ int RBTblackHeight(struct tree *node) {
 
 struct tree *RBTfixUpOnInsert(struct tree *root, struct tree *node) {
     if(node != nullptr && node->parent != nullptr && node->parent->color == red) {
-        bool leftSon = leftSon(node);
+        bool isLeftSon = isLeftSon(node);
         bool uncleIsOpp = true;
         struct tree *uncl = uncle(node, &uncleIsOpp);
         if((uncl == nullptr || uncl->color == black) && uncleIsOpp) {
             //caso fortunato: zio black opposto a x
             node->parent->color = black;
             node->parent->parent->color = red;
-            root = leftSon ? rightRotate(root, node->parent) : leftRotate(root, node->parent);
+            root = isLeftSon ? rightRotate(root, node->parent) : leftRotate(root, node->parent);
         } else if(uncl == nullptr || uncl->color == black) {
             //caso quasi fortunato: zio black non opposto a x
             struct tree *dad = node->parent;
-            root = leftSon ? rightRotate(root, node) : leftRotate(root, node);
+            root = isLeftSon ? rightRotate(root, node) : leftRotate(root, node);
             root = RBTfixUpOnInsert(root, dad);
-        } else { //(uncl->color == red)
+        } else { 
+            //caso sfortunato: zio red
             node->parent->color = uncl->color = black;
             node->parent->parent->color = red;
             root = RBTfixUpOnInsert(root, node->parent->parent);
@@ -565,11 +565,11 @@ struct tree *RBTfixUpOnInsert(struct tree *root, struct tree *node) {
 
 struct tree *uncle(struct tree *node, bool *isOpposite) { 
     if(node != nullptr && node->parent != nullptr && node->parent->parent != nullptr) {
-        if(leftSon(node->parent)) {
-            *isOpposite = leftSon(node);
+        if(isLeftSon(node->parent)) {
+            *isOpposite = isLeftSon(node);
             return node->parent->parent->right;
         } else {
-            *isOpposite = !leftSon(node);
+            *isOpposite = !isLeftSon(node);
             return node->parent->parent->left;
         }
     }
@@ -586,7 +586,7 @@ struct tree *RBTdelete(struct tree *root, struct tree *node) {
     } else {
         temp = BSTpredecessor(node);
     }
-    bool tempLeft = leftSon(temp);
+    bool tempLeft = isLeftSon(temp);
     tempDad = temp->parent;
     tempSon = temp->left == nullptr ? temp->right : temp->left;
     fixUp = (temp->color == black && (tempSon == nullptr || tempSon->color == black));
@@ -615,14 +615,14 @@ struct tree *RBTfixUpOnDelete(struct tree *root, struct tree *node, struct tree 
             //caso quasi fortunato: node ha nipote red non opposto
             nephew->color = black;
             brother->color = red;
-            root = leftSon(nephew) ? rightRotate(root, nephew) : leftRotate(root, nephew);
+            root = isLeftSon(nephew) ? rightRotate(root, nephew) : leftRotate(root, nephew);
         } else if (brother->color == black && (nephew == nullptr || nephew->color == black)) {
             //caso sfortunato: node ha nipoti e fratello black
             if(dad->color == red) {
                 dad->color = black;
                 brother->color = red;
             } else {
-                root = RBTfixUpOnDelete(root, dad, dad->parent, leftSon(dad));
+                root = RBTfixUpOnDelete(root, dad, dad->parent, isLeftSon(dad));
             }
         } else if(brother->color == red && (nephew == nullptr || nephew->color == black)) {
             brother->color = black;
@@ -644,10 +644,10 @@ struct tree *RBTfixUpOnDelete(struct tree *root, struct tree *node, struct tree 
 //else, nullptr se non ha nipoti
 struct tree *RBToppositeRedSon(struct tree *node, bool *isOpposite) {
     if(node != nullptr) {
-        if(*isOpposite = (!leftSon(node) && node->right != nullptr && node->right->color == red)) {
+        if(*isOpposite = (!isLeftSon(node) && node->right != nullptr && node->right->color == red)) {
             return node->right;
         }
-        if(*isOpposite = (leftSon(node) && node->left != nullptr && node->left->color == red)) {
+        if(*isOpposite = (isLeftSon(node) && node->left != nullptr && node->left->color == red)) {
             return node->left;
         }
         *isOpposite = false;

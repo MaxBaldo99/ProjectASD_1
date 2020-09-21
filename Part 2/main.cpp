@@ -40,9 +40,9 @@ int main() {
     }
     myfile.close();
     cout << "eseguo\n";
-    execution(BST, &BSTinsert);
     execution(RBT, &RBTinsert);
     execution(AVL, &AVLinsert);
+    execution(BST, &BSTinsert);
     
     return 0;
 }
@@ -64,19 +64,21 @@ void execution(int type, struct tree *((*function)(struct tree *&, struct tree *
             srand(time(NULL));
             for(int j = 0; j < nTimes; j++) {
                 //algoritmo ricerca e inserimento
-                struct tree *tree = NULL;
-                nOfMake[j]++;
+                struct tree *tree = nullptr;
+                //nOfMake[j]++;
+                cout << endl << "j:" << j << endl;
                 for(int k = 0; k < nElements; k++) {
-                    int random = rand();
-                    if (tree == nullptr) tree = create(random);
-                    else if (BSTfind(random, tree) == nullptr) { 
+                    int random = rand() % 100;
+                    //if (tree == nullptr) tree = create(random);
+                    if (BSTfind(tree, random) == nullptr) { 
                         struct tree *node = create(random);
-                        std::__invoke(function, tree, node);
+                        tree = std::__invoke(function, tree, node);
                         nOfMake[j]++;
                     }
+                    cout << k << ": rand -> " << random << endl;
                 }
                 //bool ok = isBST(tree);
-                destroyTree(tree);
+                tree = destroyTree(tree);
                 //tree = NULL;
             }
             end = steady_clock::now();
