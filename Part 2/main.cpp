@@ -27,7 +27,7 @@ int nOfArrays;
 duration<double> res;
 #define RELATIVE_ERROR 0.01
 
-string PATH = "Part 2/times/";
+string PATH = "./times/";
 
 int main() {    
     nOfArrays = calcNumOfArrays(minLength);
