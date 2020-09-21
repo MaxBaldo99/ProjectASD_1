@@ -17,7 +17,7 @@ void execution(vdd tinit, int type, struct tree *(*function)(struct tree *& root
 void printToFile(vdd texec, vector<double> std, int type);
 string getAlgorithmName(int type);
 
-#define startingLength 100
+#define minLength 100
 #define startingNumTimes 150
 #define nExecSTD 20
 int nOfArrays;
@@ -32,7 +32,7 @@ duration<double> res;
 string PATH = "Part 2/times/";
 
 int main() {    
-    nOfArrays = calcNumOfArrays(startingLength);
+    nOfArrays = calcNumOfArrays(minLength);
     //cin >> vec;
     res = resolution();
     cout << "resolution: " << res.count() << "\n";
@@ -55,7 +55,7 @@ int main() {
 
 //TODO
 vdd initialization() {
-    int nElements = startingLength;
+    int nElements = minLength;
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd tinit = vdd(nOfArrays);
 
@@ -80,7 +80,7 @@ vdd initialization() {
 }
 
 void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, struct tree *))) {
-    int nElements = startingLength;
+    int nElements = minLength;
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd texec(nOfArrays);
     vector<double> std(nOfArrays);
@@ -107,8 +107,7 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, st
                     }
                 }
                 //bool ok = isBST(tree);
-                int x = 0;
-                destroyTreeR(tree, x);
+                destroyTree(tree);
                 //tree = NULL;
             }
             end = steady_clock::now();
@@ -153,7 +152,7 @@ void printToFile(vdd texec, vector<double> std, int type) {
     ofstream myfile (PATH + getAlgorithmName(type) + " exec.txt");
     if (myfile.is_open()) {
         myfile << "n° elem\texec time\tstd\tn° rip\n";
-        int nElements = startingLength;
+        int nElements = minLength;
         int nTimes = startingNumTimes;
         for(int i = 0; i < texec.size(); i++) {
             myfile << nElements << "\t" << texec[i].count() << "\t" << std[i] << "\t" << nTimes << "\n";

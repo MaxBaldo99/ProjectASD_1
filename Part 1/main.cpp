@@ -16,7 +16,7 @@ void printToFile(vdd texec, vector<double> std, int type);
 string getAlgorithmName(int type);
 void callAlgorithm(int type, vector<int> vec, int left, int right, int k);
 
-#define startingLength 100
+#define minLength 100
 #define startingNumTimes 150
 #define nExecSTD 20
 int nOfArrays;
@@ -29,7 +29,7 @@ duration<double> res;
 #define RELATIVE_ERROR 0.01
 
 int main() {
-    nOfArrays = calcNumOfArrays(startingLength);
+    nOfArrays = calcNumOfArrays(minLength);
     //cin >> vec;
     res = resolution();
     cout << "resolution: " << res.count() << "\n";
@@ -54,7 +54,7 @@ vdd initialization() {
         1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
-    int nElements = startingLength;
+    int nElements = minLength;
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd tinit = vdd(nOfArrays);
 
@@ -85,7 +85,7 @@ void execution(vdd tinit, int type, int (*function)(vector<int>, int, int, int))
         1.000, 2.000, 3.000, ... , 10.000 (+ 1.000 each time) (9 array dimensions)
         10k, 20k, 30k, ... , 1mln (+ 10.000 each time) (99 array dimensions)
     */
-    int nElements = startingLength;
+    int nElements = minLength;
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd texec(nOfArrays);
     vector<double> std(nOfArrays);
@@ -159,7 +159,7 @@ void printToFile(vdd texec, vector<double> std, int type) {
     ofstream myfile ("tempi/" + getAlgorithmName(type) + " exec.txt");
     if (myfile.is_open()) {
         myfile << "n° elem\texec time\tstd\tn° rip\n";
-        int nElements = startingLength;
+        int nElements = minLength;
         int nTimes = startingNumTimes;
         for(int i = 0; i < texec.size(); i++) {
             myfile << nElements << "\t" << texec[i].count() << "\t" << std[i] << "\t" << nTimes << "\n";

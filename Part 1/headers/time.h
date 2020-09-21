@@ -10,6 +10,7 @@
 using namespace std;
 using namespace chrono;
 
+
 /*
 //ritorna altezza nodo, 0 se nodo è null
 #define h(x) ((x == NULL) ? 0 : x->height)
@@ -30,7 +31,7 @@ vector<int> randomize(int nElements);
 
 int updateNumOfElem(int n);
 int updateNumOfTimes(int n);
-int calcNumOfArrays(int startingLength);
+int calcNumOfArrays(int minLength);
 
 int minimum(vector<duration<double>> vec, int p, int q);
 int median(vector<duration<double>> vec);
@@ -204,9 +205,9 @@ int updateNumOfTimes (int n) {
     return max(5, n - 7);
 }
 
-int calcNumOfArrays(int startingLength) {
+int calcNumOfArrays(int minLength) {
     int i = 0;
-    int length = startingLength;
+    int length = minLength;
     while(length != -1) {
         length = updateNumOfElem(length);
         i++;

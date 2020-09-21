@@ -391,16 +391,14 @@ struct tree *goDeepOneDirection(struct tree *node, bool left) {
     }
 }
 
-void destroyTree(struct tree *&node, int &volte) {
-    volte++;
-    if(volte % 500000 == 0) cout << volte << endl;
+void destroyTree(struct tree *&node) {
     if(node != nullptr) {
         //if not necessary, useful to reduce stack calls
         if(node->left != nullptr) { 
-            destroyTree(node->left, volte);
+            destroyTree(node->left);
         }
         if(node->right != nullptr) {
-            destroyTree(node->right, volte);
+            destroyTree(node->right);
         }
         //free(node->details);
         delete node;
