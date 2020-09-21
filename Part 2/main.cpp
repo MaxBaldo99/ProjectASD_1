@@ -41,9 +41,6 @@ int main() {
         myfile << "resolution:\n" << res.count();
     }
     myfile.close();
-    cout << "inizializzo\n";
-    cout << "il prof ha scritto che non serve inizializzare\n";
-    //vdd tinit = initialization();
     cout << "eseguo\n";
     vdd tinit(nOfArrays);
     execution(tinit, BST, &BSTinsert);
@@ -51,32 +48,6 @@ int main() {
     execution(tinit, AVL, &AVLinsert);
     
     return 0;
-}
-
-//TODO
-vdd initialization() {
-    int nElements = minLength;
-    int nTimes = startingNumTimes; //num of times we want to measure init time
-    vdd tinit = vdd(nOfArrays);
-
-    //output to file
-    ofstream myfile (PATH + "init.txt");
-    if (myfile.is_open())
-    {
-        myfile << "n° elem\tinit time\tn° rip\n";
-    }
-    cout << "n° elem\tinit time\tn° rip\n";
-    for(int i = 0; i < nOfArrays; i++) {
-        tinit[i] = initializeTime(nElements, nTimes);
-
-        cout << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
-        myfile << nElements << "\t" << tinit[i].count() << "\t" << nTimes << "\n";
-
-        nTimes = updateNumOfTimes(nTimes);
-        nElements = updateNumOfElem(i, nElements);
-    }
-    myfile.close();
-    return tinit;
 }
 
 void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, struct tree *))) {
