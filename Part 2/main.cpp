@@ -11,7 +11,7 @@ using namespace chrono;
 
 #define vdd vector<duration<double>>
 
-void execution(vdd tinit, int type, struct tree *(*function)(struct tree *& root, struct tree *node));
+void execution(int type, struct tree *(*function)(struct tree *& root, struct tree *node));
 void printToFile(vdd texec, vector<double> std, int type);
 string getAlgorithmName(int type);
 
@@ -40,15 +40,14 @@ int main() {
     }
     myfile.close();
     cout << "eseguo\n";
-    vdd tinit(nOfArrays);
-    execution(tinit, BST, &BSTinsert);
-    execution(tinit, RBT, &RBTinsert);
-    execution(tinit, AVL, &AVLinsert);
+    execution(BST, &BSTinsert);
+    execution(RBT, &RBTinsert);
+    execution(AVL, &AVLinsert);
     
     return 0;
 }
 
-void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, struct tree *))) {
+void execution(int type, struct tree *((*function)(struct tree *&, struct tree *))) {
     int nElements = minLength;
     int nTimes = startingNumTimes; //num of times we want to measure init time
     vdd texec(nOfArrays);
@@ -84,10 +83,6 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, st
             ttoti[h] = (duration<double>)((end - start) / nTimes);
             meanOfNumOfMake[i] = mean(nOfMake);
         }
-        for(int j = 0; j < nExecSTD; j++) {
-            //ttoti becomes texeci: substracted init time
-            ttoti[j] -= tinit[i]; 
-        }
         texec[i] = (duration<double>) mean(ttoti);
         std[i] = meanSquaredError(ttoti);
         double measuredError = texec[i].count() * nTimes;
@@ -106,19 +101,12 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, st
                     i, nElements, ti, nTimes, std[i], stdPerc, n_minus_m, perc_m);
             nTimes = updateNumOfTimes(nTimes);
             nElements = updateNumOfElem(i, nElements);
-            /*
-            if(i < 10) { cout << 0; }
-            cout << i << ") ";
-            if(nElements < 1000) { cout << 0; }
-            cout << nElements << "\t" << texec[i].count() << "\t" << nTimes << "\t" << std[i] << "\t" << stdPerc << "\t" << nElements - meanOfNumOfMake[i] << "\t" << percNumOfMake << "\n";
-            */
         }
     }
     printToFile(texec, std, type);
 }
 
 void printToFile(vdd texec, vector<double> std, int type) {
-
     ofstream myfile (PATH + getAlgorithmName(type) + " exec.txt");
     if (myfile.is_open()) {
         myfile << "n° elem\texec time\tstd\tn° rip\n";
