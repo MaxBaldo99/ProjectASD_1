@@ -12,6 +12,8 @@
 using namespace std;
 using namespace chrono;
 
+#define maxLength 1000000
+
 double mean (vector<double> vec);
 //media
 double mean (vector<duration<double>> vec);
@@ -26,7 +28,7 @@ vector<int> randomize(int nElements);
 
 int updateNumOfElem(int i, int n);
 int updateNumOfTimes(int n);
-int calcNumOfArrays(int startingLength);
+int calcNumOfArrays(int minLength);
 
 int minimum(vector<duration<double>> vec, int p, int q);
 int median(vector<duration<double>> vec);
@@ -162,7 +164,7 @@ int updateNumOfElem (int i, int n) {
     k = pow(10, k);
     int increase = 100 * k;
     n += increase;
-    if(n > pow(10, 6)) {
+    if(n > maxLength) {
         return -1;
     } else {
         return n;
@@ -173,9 +175,9 @@ int updateNumOfTimes (int n) {
     return max(5, n - 7);
 }
 
-int calcNumOfArrays(int startingLength) {
+int calcNumOfArrays(int minLength) {
     int i = 0;
-    int length = startingLength;
+    int length = minLength;
     while(length != -1) {
         length = updateNumOfElem(i, length);
         i++;
