@@ -24,9 +24,8 @@ struct tree *add(int key, bool left, char *details, struct tree *parent);
 void preOrder(struct tree *node);
 void inOrder(struct tree *node);
 void postOrder(struct tree *node);
-void destroyTree(struct tree *& node);
-struct tree* destroyTreeRasera(struct tree*& root, int &volte);
-//struct tree* destroyTree(struct tree *& node,  int& volte);
+//void destroyTree(struct tree *& node);
+struct tree *destroyTree(struct tree *& root);
 void polishOrder(struct tree *node);
 struct tree *goDeepOneDirection(struct tree *node, bool left);
 

@@ -391,6 +391,7 @@ struct tree *goDeepOneDirection(struct tree *node, bool left) {
     }
 }
 
+/*
 void destroyTree(struct tree *&node) {
     if(node != nullptr) {
         //if not necessary, useful to reduce stack calls
@@ -404,9 +405,9 @@ void destroyTree(struct tree *&node) {
         delete node;
     }
 }
+*/
 
-struct tree* destroyTreeR(struct tree*& root, int &volte) {
-    volte++;
+struct tree* destroyTree(struct tree*& root) {
     if (root == nullptr) return nullptr;
     //Elimino la le foglie
     if (root->left == nullptr && root->right == nullptr) {
@@ -415,10 +416,10 @@ struct tree* destroyTreeR(struct tree*& root, int &volte) {
     }
     else {
         //Elimino ricorsivamente i figli
-        if (root->left != nullptr) root->left = destroyTreeR(root->left, volte);
-        if (root->right != nullptr) root->right = destroyTreeR(root->right, volte);
+        if (root->left != nullptr) root->left = destroyTree(root->left);
+        if (root->right != nullptr) root->right = destroyTree(root->right);
         //Elimino la root
-        return destroyTreeR(root, volte);
+        return destroyTree(root);
     }
 }
 
