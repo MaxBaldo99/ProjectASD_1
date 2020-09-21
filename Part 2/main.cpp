@@ -66,6 +66,7 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, st
             for(int j = 0; j < nTimes; j++) {
                 //algoritmo ricerca e inserimento
                 struct tree *tree = NULL;
+                nOfMake[j]++;
                 for(int k = 0; k < nElements; k++) {
                     int random = rand();
                     if (tree == nullptr) tree = create(random);
@@ -100,9 +101,9 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, st
             double stdPerc = std[i] / mean(ttoti);
             double perc_m = meanOfNumOfMake[i] / nElements;
             double ti = texec[i].count();
-            double m_minus_n = nElements - meanOfNumOfMake[i];
+            double n_minus_m = nElements - meanOfNumOfMake[i];
             printf("%2d) %4d\t%e\t%3d\t%e\t%.6f\t%f\t%f\n", 
-                    i, nElements, ti, nTimes, std[i], stdPerc, m_minus_n, perc_m);
+                    i, nElements, ti, nTimes, std[i], stdPerc, n_minus_m, perc_m);
             nTimes = updateNumOfTimes(nTimes);
             nElements = updateNumOfElem(i, nElements);
             /*
