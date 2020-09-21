@@ -25,22 +25,18 @@ void preOrder(struct tree *node);
 void inOrder(struct tree *node);
 void postOrder(struct tree *node);
 //void destroyTree(struct tree *& node);
-struct tree *destroyTree(struct tree *& root);
+struct tree *destroyTree(struct tree *&root);
 void polishOrder(struct tree *node);
 struct tree *goDeepOneDirection(struct tree *node, bool left);
 
 //BST Tree
-struct tree *BSTinsert(struct tree *& root, struct tree * node);
+struct tree *BSTinsert(struct tree *&root, struct tree *node);
 struct tree *BSTfind(struct tree *root, int key);
 struct tree *BSTdelete(struct tree *root, struct tree *node, bool successor);
 struct tree *BSTpredecessor(struct tree *node);
 struct tree *BSTsuccessor(struct tree *node);
 struct tree *BSTmin(struct tree *node);
 struct tree *BSTmax(struct tree *node);
-
-void BSTinserta(struct tree*& root, int key);
-void BSTinsertb(struct tree *root, int key);
-void BSTinsert2(struct tree* root, int key);
 
 //metodi per bilanciamento
 struct tree *rightRotate(struct tree *root, struct tree *node);

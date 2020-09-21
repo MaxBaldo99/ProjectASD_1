@@ -71,7 +71,7 @@ void execution(vdd tinit, int type, struct tree *((*function)(struct tree *&, st
                     if (tree == nullptr) tree = create(random);
                     else if (BSTfind(random, tree) == nullptr) { 
                         struct tree *node = create(random);
-                        BSTinsert(tree, node);
+                        std::__invoke(function, tree, node);
                         nOfMake[j]++;
                     }
                 }
