@@ -13,7 +13,7 @@ struct tree *create(int key) {
     struct tree *x = new struct tree;
     //x->details = nullptr;
     x->key = key;
-    x->left = x->right = nullptr;
+    x->left = x->right = x->parent = nullptr;
     x->height = -1;
     x->color = -1;
     return x;
@@ -22,7 +22,7 @@ struct tree *create(int key) {
 struct tree *add(int key, bool left, char *details, struct tree *parent) {
     struct tree *x = new struct tree;
     x->key = key;
-    x->left = x->right = nullptr;
+    x->left = x->right = x->parent = nullptr;
     //x->details = nullptr;
     x->height = -1;
     x->color = -1;
@@ -66,6 +66,25 @@ void postOrder(struct tree *node) {
     }
 }
 
+//polish is same as pre order but with nullptrs printed too
+void polishOrderNice(struct tree *node, int tab) {
+    for(int i = 0; i < tab; i++) {
+        printf("\t");
+    }
+    print(node);
+    if(node != nullptr) {
+        printf(" {\n");
+        tab++;
+        polishOrderNice(node->left, tab);
+        polishOrderNice(node->right, tab);   
+        for(int i = 0; i < tab - 1; i++) {
+            printf("\t");
+        }
+        printf(" }\n");
+    } else {
+        printf("\n");
+    }
+}
 
 //polish is same as pre order but with nullptrs printed too
 void polishOrder(struct tree *node) {

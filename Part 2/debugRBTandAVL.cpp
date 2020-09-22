@@ -78,7 +78,8 @@ int main() {
             //printf("Command not found");
 
         }
-        polishOrder(myTree);
+        //polishOrder(myTree);
+        polishOrderNice(myTree, 0);
         printf("\n");
     }
     destroyTree(myTree);
