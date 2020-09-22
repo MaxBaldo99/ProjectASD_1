@@ -1,6 +1,10 @@
 #include "headers/tree.h"
 #include "headers/tree.cpp"
 
+#define BST 0
+#define RBT 1
+#define AVL 2
+
 int main() { 
     
     /*
@@ -18,8 +22,8 @@ int main() {
     bool getInput = true;
     string command = "";
     struct tree *myTree = NULL;
-    bool RBT = true;
-    printf("mode: RBT\n");
+    int type = BST;
+    printf("mode: BST\n");
 
     while(getInput) {
 
@@ -28,21 +32,35 @@ int main() {
         struct tree *temp = NULL;
         
         if(command.compare("avl") == 0) {
-            if(RBT) {
+            if(type != AVL) {
+                type = AVL;
                 myTree = destroyTree(myTree);
                 printf("\nmode: AVL\n");
+            } else {
+                printf("mode already AVL\n");
             }
-            RBT = false;
         } else if(command.compare("rbt") == 0) {
-            if(!RBT) {
+            if(type != RBT) {
+                type = RBT;
                 myTree = destroyTree(myTree);
                 printf("\nmode: RBT\n");
+            } else {
+                printf("mode already RBT\n");
             }
-            RBT = true;
+        } else if(command.compare("bst") == 0) {
+            if(type != BST) {
+                type = BST;
+                myTree = destroyTree(myTree);
+                printf("\nmode: BST\n");
+            } else {
+                printf("mode already BST\n");
+            }
         } else if(command.compare("insert") == 0) {
             cin >> key;
             temp = create(key);
-            if(RBT) {
+            if(type == BST) {
+                BSTinsert(myTree, temp);
+            } else if(type == RBT) {
                 myTree = RBTinsert(myTree, temp);
             } else {
                 myTree = AVLinsert(myTree, temp);
@@ -51,12 +69,13 @@ int main() {
         } else if (command.compare("remove") == 0) {
             cin >> key;
             temp = BSTfind(myTree, key);
-            if(RBT) {
+            if(type == BST) {
+                myTree = BSTdelete(myTree, temp, true);
+            } else if (type == RBT) {
                 myTree = RBTdelete(myTree, temp);
             } else {
                 myTree = AVLdelete(myTree, temp);
             }
-
         } else if (command.compare("find") == 0) {
             cin >> key;
             temp = BSTfind(myTree, key);
@@ -75,7 +94,8 @@ int main() {
 
         } else {
             //getInput = false;
-            //printf("Command not found");
+            printf("Command not found\n");
+            printf("Type 'exit' lo close terminal\n");
 
         }
         //polishOrder(myTree);
