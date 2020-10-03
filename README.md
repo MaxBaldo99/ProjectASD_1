@@ -20,7 +20,7 @@ Implement and compare these three algorithms:
     - [x] compare sperimental and asyntotic data
 - [x] Write the final relation with graphs of data found
 
-[Link for the 1^st relation](https://drive.google.com/open?id=1RBXC6th5qzl4aEK_ah5653H4VoKP_PkQs3e1rcd3mQo)
+[Link for the 1 relation](https://drive.google.com/open?id=1RBXC6th5qzl4aEK_ah5653H4VoKP_PkQs3e1rcd3mQo)
 
 ## Part two
 Binary Search Trees (BST)
@@ -48,4 +48,4 @@ At the end of computation will be done:
   * random numbers possible range increases
   * array size decreases
   
-[Link for the 2^nd relation](https://docs.google.com/document/d/1CBU8kkavbzNIrlgNDxyTsqXeaoLuT9wGBhhoK7GhyQY/edit?usp=sharing)
+[Link for the 2 relation](https://docs.google.com/document/d/1CBU8kkavbzNIrlgNDxyTsqXeaoLuT9wGBhhoK7GhyQY/edit?usp=sharing)
